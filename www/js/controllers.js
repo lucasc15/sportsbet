@@ -1,5 +1,5 @@
-//Controller for events to allow for loading of events for a particular sport, and inputting votes
-//Needs to be instatiated like controller.sport = sport to interact with the API
+// Controller for events to allow for loading of events for a particular sport, and inputting votes
+// Needs to be instatiated like controller.sport = sport to interact with the API
 sportBetApp.controller("EventController", function($scope, EventData) {
     $scope.events;
     $scope.status = null;
@@ -25,4 +25,22 @@ sportBetApp.controller("EventController", function($scope, EventData) {
 		$scope.status = "Error";
 	    });
     }
-}
+});
+
+sportsBetApp.controller("LoginController", function($scope, LoginData) {
+    $scope.login = function(username, password) {
+	LoginData.login(username, password)
+	    .success(function() {
+                $scope.status = null;
+	    })
+	    .error(function (error) {
+		$scope.status = "Error logging in!";
+	    });
+    }
+
+    $scope.logout = function(username, password) {
+        LoginData.logout();
+    }
+});
+
+		      

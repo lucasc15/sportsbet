@@ -1,26 +1,62 @@
-//composer require firebase/php-jwt:dev-master  -> for JWT logic
+<?php
+use \Firebase\JWT\JWT;
+require_once('config.php');
 
-$config = Factory::fromFile('config/config.php'); //need to make this file
+$CONFIG = new Config();
 
-// Function to authenticate user, returns empty string if failed
-authenticateUser = function($username, $password) {
-    //get user from database; username, salt&hash, info...
+/* Function to authenticate user, returns empty string if failed */
+function authenticateUser($username, $password) {
+    /*get user from database w/ this username 
+    $user = findUSerSomeHow($username);
+    */
     if (isset($user)){
         if (password_verify($password, $user.password){
-	   //return JWT with their info!
+	    return signToken($user);
 	} else {
 	    return "";
 	}
     }
-}
+};
+    
 
-// Function to register user by checking if username is availble
-registerUser = function($username, $password) {
-    // $user = findUserSomehow
+/* Function to register user by checking if username is availble */
+function registerUser($username, $password) {
+    /* $user = findUserSomehow */
     if (!isset($user)){
         //create new user with password
 	$hash = password_hash($password, PASSWORD_BCRYPT)
-	$user.username = $username
-	$user.password = $password
+	$user->username = $username
+	$user->password = $password
     }
-}
+};
+
+function signToken($user) {
+    global $CONFIG;
+    $now = new DateTime();
+    $now = $now->getTimestamp();
+    $token_data = array(
+			'iss' => $CONFIG->JWT_ISSUER,
+			'aud' => "GENERAL",
+			'nbf' => $now,
+			'iat' => $now,
+			'exp' => $now + $CONFIG->JWT_EXPIRY_TIME,
+			'user_id' => $user->ID
+    );
+    return JWT->encode($token_data, $CONFIG->JWT_SECRET, $alg=$CONFIG->JWT_HASH);
+};
+
+function isValid($token) {
+    global $CONFIG;
+    try {
+        $decoded = JWT->decode($token, $CONFIG->JWT_SECRET, $CONFIG->JWT_HASH);
+    } catch (Exception $e) {
+        return false;
+    }
+    return $decoded;
+};
+
+function anonymousToken() {
+    /* $anonymousUser = findAnonymousUser(); */
+    $anaonymousUser = "";
+    return signToken($anonymousUser);
+};
