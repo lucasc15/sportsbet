@@ -1,45 +1,51 @@
 <?php
-require 'vendor/autoload.php'
-require_once('Config.php')
+use \Config;
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 
-$CONFIG = new Config();
+require '../vendor/autoload.php';
+require_once('config.php');
 
-$app = new \Slim\App();
+$CONFIG = new Config\Config();
+
+$app = new \Slim\App;
 
 $container = $app->getContainer();
-
 $container['view'] = function ($container) {
-    $view = new \Slim\Views\Twig("templates", [
+    $view = new \Slim\Views\Twig(__DIR__."/templates", [
         'cache' => false
     ]);
 
     $basePath = rtrim(str_ireplace('index.php',
-				   '', $container['request']->getUri()->getBasePath()),
+				   '',
+				   $container['request']->getUri()->getBasePath()
+				   ),
 		      '/');
     $view->addExtension(new Slim\Views\TwigExtension($container['router'], $basePath));
     return $view;
-}
+};
 
-$app->get('/home', function($request, $reponse, $args){
-    return $this->view->render($response, 'default.html', []);
+$app->get('/home', function(Request $request, Response $response){
+    return $this->view->render($response, 'default.html');
 });
 
-$app->get('/', function($request, $response, $args){
-    return $this->view->render($response, 'default.html',[]);
+$app->get('/', function(Request $request, Response $response){
+    return $this->view->render($response, 'default.html');
 });
   
 $app->get('/sports/{sport}', function($request, $response, $args) {
-    if (CONFIG->IsSport($args['sport'])) {
-        return $this->view->render($response, 'sports.html', [
+    global $CONFIG;
+    if ($CONFIG->IsSport($args['sport'])) {
+        return $this->view->render($response, 'sport.html', [
             'sport' => $args['sport']
         ]);
     } else {
-        return $this->view->render($reponse, '404.html')
+      return $this->view->render($response, '404.html');
     }
-});
+})->setName('sport');
 
 $app->get('/events/{sport}', function($request, $response, $args) {
-    if (CONFIG->IsSport($args['sport'])){
+    if ($CONFIG->IsSport($args['sport'])){
         return '{"testevent":"test"}';
     } else {
         $response.setStatus(404);
@@ -57,7 +63,7 @@ $app->post('/login', function($request, $response, $args) {
 
 $app->get('/register', function($request, $response, $args) {
     return $this->view->render($response, 'register.html', []);
-});
+  })->setName('register');
 
 $app->post('/register', function($request, $response, $args) {
     $data = $request->getPostBody();

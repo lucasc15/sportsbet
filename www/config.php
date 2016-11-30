@@ -1,17 +1,20 @@
-class Config {
-    /* JWT INFO */
-    JWT_SECRET = "SomethingVerySecretWeShouldChange";
-    JWT_HASH = "HS256";
+<?php
+namespace Config{
+    class Config {
+        /* JWT INFO */
+        public $JWT_SECRET = "SomethingVerySecretWeShouldChange";
+        public $JWT_HASH = "HS256";
 
-    /* DB CONNECTION INFO */ 
-    DB_HOST = "localhost";
-    DB_NAME = "";
-    DB_USER = "";
-    DB_PASSWORD = "";
+        /* DB CONNECTION INFO */ 
+        public $DB_HOST = "localhost";
+        public $DB_NAME = "";
+        public $DB_USER = "";
+        public $DB_PASSWORD = "";
 
-    /* Sports Supported */
-    SUPPORTED_SPORTS = array("hockey", "basketball", "football");
-    function IsSport(sport) {
-        return (in_array(sport, SUPPORTED_SPORTS));
+        /* Sports Supported */
+        private $SUPPORTED_SPORTS = array("hockey", "basketball", "football");
+        public function IsSport($sport) {
+            return (in_array($sport, $this->SUPPORTED_SPORTS));
+        }
     }
 }
