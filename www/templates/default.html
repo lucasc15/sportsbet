@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href='http://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css'> 
+
+        <nav class="social">
+            <ul>
+                <li><a href="https://www.nhl.com/">NHL Website <i class="fa fa-twitter"></i></a></li>
+                <li><a href="http://www.nba.com/">NBA Website <i class="fa fa-facebook"></i></a></li>
+                <li><a href="http://www.nfl.com/">NFL Website <i class="fa fa-dribbble"></i></a></li>
+                <li><a href="http://www.sportsline.com/">SportsLine <i class="fa fa-behance"></i></a></li>
+                 <li><a href="https://github.com/programmingvu"> VUUUUU  <i class="fa fa-behance"></i></a></li>
+                <li><a href="https://github.com/Jnaga7">JONNNNN <i class="fa fa-behance"></i></a></li>
+                <li><a href="https://github.com/lucasc15">LUCASSSSS  <i class="fa fa-behance"></i></a></li>
+
+            </ul>
+        </nav>
+
+
+
+    </head>
+
+
+    <div class="top">
+
+        <p> SPORTSBET  By Lucas, Jon and Vu </p>
+
+        {% block head %}
+        <link rel="stylesheet" href="style.css" />
+        <title> {% block title %} {% endblock %} - My Webpage </title>
+        {% endblock %}
+    </div>
+
+    <div class="left">
+       
+            <div id="content"> {% block content %} {% endblock %} </div>
+    
+    <div class="right">
+            <div id="sidebar"> {% block sidebar %} {% endblock %} </div>
+            </div>
+            
+    <div class="bottom">
+                <div id ="footer">             
+                    {% block footer %}
+                    &copy; Copyright 2011 by <a href="http://domain.invalid/"> SPORTSBET</a>.
+                    {% endblock %}
+                </div>
+            </div>
+            
+
+
+
+
+        </html>
