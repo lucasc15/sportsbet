@@ -1,0 +1,23 @@
+{% extends "default.html" %}
+{% block content %}
+  <h1> {{ sport }} </h1>
+  <div ng-app="sportsBetApp" ng-controller="EventController">
+    <div spa-sport app-sport=" {{ sport }} "></div>
+    {% verbatim %}
+    <div ng-repeat="item in events.dates">
+      <div ng-repeat="(date, eventList) in item">
+        <h2>{{ date }}</h2>
+        <div ng-repeat="event in eventList">
+          <h3>{{ event.title }}</h3>
+          <div ng-repeat="option in event.options">
+	    <button ng-click="vote(event.eventID, option.optionID)"/>
+            <p>{{ option.voteCount }}</p>
+            <p>{{ option.text }}</p>
+            <img src="{{ option.image }}"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endverbatim %}
+  </div>
+{% endblock %}

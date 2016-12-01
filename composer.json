@@ -1,0 +1,9 @@
+{
+    "require": {
+        "slim/slim": "^3",
+        "slim/twig-view": "^2.1",
+	"propel/propel": "~2.0@dev",
+        "monolog/monolog": "^1.22",
+        "firebase/php-jwt": "^4.0"
+    }
+}
