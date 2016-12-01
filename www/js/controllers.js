@@ -1,12 +1,13 @@
 // Controller for events to allow for loading of events for a particular sport, and inputting votes
 // Needs to be instatiated like controller.sport = sport to interact with the API
-sportBetApp.controller("EventController", function($scope, EventData) {
+sportsBetApp.controller("EventController", function($scope, EventData) {
     $scope.events;
     $scope.status = null;
     GetEvents();
 
     function GetEvents() {
-	EventData.getEvents($scope.sport)
+	//EventData.getEvents($scope.sport)
+	EventData.getEvents('hockey')
 	    .success(function (events) {
 		$scope.events = events;
 		$scope.status = null;

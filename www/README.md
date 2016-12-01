@@ -9,19 +9,20 @@ To run the project, `cd` to the directory `.../sportsbet/www` and type `php -S l
 #Event API
 A `POST` request to `events/{sport}` should return the events for the current day/ near future. The Format for the response should be:
 
-  JSON = ['2016-11-30':
+  JSON = {"date":
             [
-	      { 'eventID': eventid,
-	        'title': 'eventTitle',
-	        'options': [{
-	                     'optionID': optionID,
-			     'text': optionText,
-			     'image': 'http://domain.com/url/to/image',
-			     'voteCount': voteCount,
+	      { "eventID": eventid,
+	        "title": "eventTitle",
+	        "options": [{
+	                     "optionID": optionID,
+			     "text": optionText,
+			     "image": "http://domain.com/url/to/image",
+			     "voteCount": voteCount,
 			     }, ...
 			   ],
 	      }...
 	    ]
-	  ]
+	    ...
+	 }
 
 Angular will then iterate over dates -> Events and need a way to display an event title, the options, and dynamically update the click end point urls for voting to include eventID and optionID.

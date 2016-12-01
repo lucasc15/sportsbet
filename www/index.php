@@ -5,6 +5,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 require '../vendor/autoload.php';
 require_once('config.php');
+require_once('test_event_response.php');
 
 $CONFIG = new Config\Config();
 
@@ -44,9 +45,18 @@ $app->get('/sports/{sport}', function($request, $response, $args) {
     }
 })->setName('sport');
 
-$app->get('/events/{sport}', function($request, $response, $args) {
+$app->get('/api/events/{sport}', function($request, $response, $args) {
+    global $CONFIG, $TestDataResponse;
     if ($CONFIG->IsSport($args['sport'])){
-        return '{"testevent":"test"}';
+      if ($args['sport'] == 'hockey') {
+	  header("Content-Type: application/json");
+	  $out = fopen(__DIR__."/test_response.json", "w");
+	  fwrite($out, $TestDataResponse);
+	  fclose($out);
+	  return $response->withStatus(200)
+	    ->withHeader('Content-type', 'application/json')
+	    ->write($TestDataResponse);
+	}
     } else {
         $response.setStatus(404);
     }

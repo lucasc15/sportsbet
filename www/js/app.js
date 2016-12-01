@@ -1,4 +1,4 @@
-var sportsBetApp = angular.module('sportsBetApp', []);
+var sportsBetApp = angular.module('sportsBetApp', ['EventService', 'LoginService']);
 
 //custom directive for specifying sport on the html web page
 //followed answer/fiddle here: http://stackoverflow.com/questions/16796341/set-angular-scope-variable-in-markup
@@ -9,4 +9,4 @@ sportsBetApp.directive('spaSport', function() {
 	    sport: '@appSport',
 	}
     }
-}
+});
