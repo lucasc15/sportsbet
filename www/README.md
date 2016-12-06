@@ -26,3 +26,23 @@ A `POST` request to `events/{sport}` should return the events for the current da
 	 }
 
 Angular will then iterate over dates -> Events and need a way to display an event title, the options, and dynamically update the click end point urls for voting to include eventID and optionID.
+
+# Generate sql code of schema
+vendor/bin/propel sql:build 
+
+# Generate model files
+vendor/bin/propel model:build -vv
+
+# Create the mysql table
+mysqladmin -u root -p create bookstore
+
+# Insert sql into database
+vendor/bin/propel sql:insert
+
+# Database info
+database name: sportsbet
+
+user : root
+
+password: batman123456
+
