@@ -38,8 +38,8 @@ Generate model files
 vendor/bin/propel model:build -vv
 
 Create the mysql table
-mysqladmin -u root -p create bo
-okstore
+
+mysqladmin -u root -p create sportsbet
 
 Insert sql into database
 
