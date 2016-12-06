@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="sportsbet" defaultIdMethod="native">
+  <table name="sports" phpName="Sports">
+    <column name="sportID" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="sport" type="varchar" size="128" required="true" />
+  </table>
+  <table name="dates" phpName="Dates">
+    <column name="date" type="date" required="true" />
+    <column name="sportID" type="integer" required="true" />
+    <column name="eventID" type="integer" required="true" />
+    <foreign-key foreignTable="sports" phpName="Sports" refPhpName="Dates">
+      <reference local="sportID" foreign="sportID" />
+    </foreign-key>
+    <foreign-key foreignTable="events" phpName="Events" refPhpName="Dates">
+      <reference local="eventID" foreign="eventID" />
+    </foreign-key>
+  </table>
+  <table name="events" phpName="Events">
+    <column name="eventID" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="title" type="varchar" size="255" required="true" />
+  </table>
+  <table name="options" phpName="Options">
+    <column name="optionID" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="text" type="varchar" size="128" required="true" />
+    <column name="image" type="varchar" size="255" required="true" />
+    <column name="voteCount" type="integer" required="true" />
+    <column name="eventID" type="integer" required="true" />
+    <foreign-key foreignTable="events" phpName="Events" refPhpName="Options">
+      <reference local="eventID" foreign="eventID" />
+    </foreign-key>
+  </table>
+  <table name="users" phpName="Users">
+    <column name="userID" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="username" type="varchar" size="255" required="true" />
+    <column name="email" type="varchar" size="255" required="true" />
+    <column name="password" type="varchar" size="255" required="true" />
+    <column name="correct" type="integer" required="true" />
+    <column name="incorrect" type="integer" required="true" />
+  </table>
+  <table name="votes" phpName="Votes">
+    <column name="voteID" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+    <column name="userID" type="integer" required="true" />
+    <column name="optionID" type="integer" required="true" />
+    <foreign-key foreignTable="users" phpName="Users" refPhpName="Votes">
+      <reference local="userID" foreign="userID" />
+    </foreign-key>
+    <foreign-key foreignTable="options" phpName="Options" refPhpName="Votes">
+      <reference local="optionID" foreign="optionID" />
+    </foreign-key>
+  </table>
+</database>
