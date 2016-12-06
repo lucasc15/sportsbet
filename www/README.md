@@ -30,18 +30,23 @@ Angular will then iterate over dates -> Events and need a way to display an even
 # Database
 
 Generate sql code of schema
+
 vendor/bin/propel sql:build 
 
 Generate model files
+
 vendor/bin/propel model:build -vv
 
 Create the mysql table
-mysqladmin -u root -p create bookstore
+mysqladmin -u root -p create bo
+okstore
 
 Insert sql into database
+
 vendor/bin/propel sql:insert
 
 Database info
+
 database name: sportsbet
 
 user : root
