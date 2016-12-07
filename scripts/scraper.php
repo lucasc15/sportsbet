@@ -112,15 +112,14 @@ class ScheduleScraper {
 	$event.save();
 	
       }
-      // Need to add correct flag to the options table;
-      /*if ($event->getOptions()[0] == null) {
+      if ($event->getOptions()[0] == null) {
 	$options = $this->setWinningOption(
 					   $row[$this->hockey_map['option1']['col']],
 					   $row[$this->hockey_map['option2']['col']],
 					   $event->getOptions()[0],
 					   $event->getOptions()[1]
 					   );
-					   }*/
+      }
     }
   }
   /* Function to get the name of an event for two team */
