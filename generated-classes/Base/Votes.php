@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'votes' table.
  *
- * 
+ *
  *
  * @package    propel.generator..Base
  */
-abstract class Votes implements ActiveRecordInterface 
+abstract class Votes implements ActiveRecordInterface
 {
     /**
      * TableMap class name
@@ -65,21 +65,21 @@ abstract class Votes implements ActiveRecordInterface
 
     /**
      * The value for the voteid field.
-     * 
+     *
      * @var        int
      */
     protected $voteid;
 
     /**
      * The value for the userid field.
-     * 
+     *
      * @var        int
      */
     protected $userid;
 
     /**
      * The value for the optionid field.
-     * 
+     *
      * @var        int
      */
     protected $optionid;
@@ -319,17 +319,17 @@ abstract class Votes implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-        
+
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-        
+
         return $propertyNames;
     }
 
     /**
      * Get the [voteid] column value.
-     * 
+     *
      * @return int
      */
     public function getVoteid()
@@ -339,7 +339,7 @@ abstract class Votes implements ActiveRecordInterface
 
     /**
      * Get the [userid] column value.
-     * 
+     *
      * @return int
      */
     public function getUserid()
@@ -349,7 +349,7 @@ abstract class Votes implements ActiveRecordInterface
 
     /**
      * Get the [optionid] column value.
-     * 
+     *
      * @return int
      */
     public function getOptionid()
@@ -359,7 +359,7 @@ abstract class Votes implements ActiveRecordInterface
 
     /**
      * Set the value of [voteid] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\Votes The current object (for fluent API support)
      */
@@ -379,7 +379,7 @@ abstract class Votes implements ActiveRecordInterface
 
     /**
      * Set the value of [userid] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\Votes The current object (for fluent API support)
      */
@@ -403,7 +403,7 @@ abstract class Votes implements ActiveRecordInterface
 
     /**
      * Set the value of [optionid] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\Votes The current object (for fluent API support)
      */
@@ -721,13 +721,13 @@ abstract class Votes implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'voteID':                        
+                    case 'voteID':
                         $stmt->bindValue($identifier, $this->voteid, PDO::PARAM_INT);
                         break;
-                    case 'userID':                        
+                    case 'userID':
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'optionID':                        
+                    case 'optionID':
                         $stmt->bindValue($identifier, $this->optionid, PDO::PARAM_INT);
                         break;
                 }
@@ -839,10 +839,10 @@ abstract class Votes implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-        
+
         if ($includeForeignObjects) {
             if (null !== $this->aUsers) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'users';
@@ -853,11 +853,11 @@ abstract class Votes implements ActiveRecordInterface
                     default:
                         $key = 'Users';
                 }
-        
+
                 $result[$key] = $this->aUsers->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aOptions) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'options';
@@ -868,7 +868,7 @@ abstract class Votes implements ActiveRecordInterface
                     default:
                         $key = 'Options';
                 }
-        
+
                 $result[$key] = $this->aOptions->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1042,7 +1042,7 @@ abstract class Votes implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-        
+
     /**
      * Returns the primary key for this object (row).
      * @return int

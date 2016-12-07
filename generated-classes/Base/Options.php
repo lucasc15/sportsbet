@@ -28,11 +28,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'options' table.
  *
- * 
+ *
  *
  * @package    propel.generator..Base
  */
-abstract class Options implements ActiveRecordInterface 
+abstract class Options implements ActiveRecordInterface
 {
     /**
      * TableMap class name
@@ -68,35 +68,35 @@ abstract class Options implements ActiveRecordInterface
 
     /**
      * The value for the optionid field.
-     * 
+     *
      * @var        int
      */
     protected $optionid;
 
     /**
      * The value for the text field.
-     * 
+     *
      * @var        string
      */
     protected $text;
 
     /**
      * The value for the image field.
-     * 
+     *
      * @var        string
      */
     protected $image;
 
     /**
      * The value for the votecount field.
-     * 
+     *
      * @var        int
      */
     protected $votecount;
 
     /**
      * The value for the eventid field.
-     * 
+     *
      * @var        int
      */
     protected $eventid;
@@ -343,17 +343,17 @@ abstract class Options implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-        
+
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-        
+
         return $propertyNames;
     }
 
     /**
      * Get the [optionid] column value.
-     * 
+     *
      * @return int
      */
     public function getOptionid()
@@ -363,7 +363,7 @@ abstract class Options implements ActiveRecordInterface
 
     /**
      * Get the [text] column value.
-     * 
+     *
      * @return string
      */
     public function getText()
@@ -373,7 +373,7 @@ abstract class Options implements ActiveRecordInterface
 
     /**
      * Get the [image] column value.
-     * 
+     *
      * @return string
      */
     public function getImage()
@@ -383,7 +383,7 @@ abstract class Options implements ActiveRecordInterface
 
     /**
      * Get the [votecount] column value.
-     * 
+     *
      * @return int
      */
     public function getVotecount()
@@ -393,7 +393,7 @@ abstract class Options implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     * 
+     *
      * @return int
      */
     public function getEventid()
@@ -403,7 +403,7 @@ abstract class Options implements ActiveRecordInterface
 
     /**
      * Set the value of [optionid] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\Options The current object (for fluent API support)
      */
@@ -423,7 +423,7 @@ abstract class Options implements ActiveRecordInterface
 
     /**
      * Set the value of [text] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\Options The current object (for fluent API support)
      */
@@ -443,7 +443,7 @@ abstract class Options implements ActiveRecordInterface
 
     /**
      * Set the value of [image] column.
-     * 
+     *
      * @param string $v new value
      * @return $this|\Options The current object (for fluent API support)
      */
@@ -463,7 +463,7 @@ abstract class Options implements ActiveRecordInterface
 
     /**
      * Set the value of [votecount] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\Options The current object (for fluent API support)
      */
@@ -483,7 +483,7 @@ abstract class Options implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\Options The current object (for fluent API support)
      */
@@ -821,19 +821,19 @@ abstract class Options implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'optionID':                        
+                    case 'optionID':
                         $stmt->bindValue($identifier, $this->optionid, PDO::PARAM_INT);
                         break;
-                    case 'text':                        
+                    case 'text':
                         $stmt->bindValue($identifier, $this->text, PDO::PARAM_STR);
                         break;
-                    case 'image':                        
+                    case 'image':
                         $stmt->bindValue($identifier, $this->image, PDO::PARAM_STR);
                         break;
-                    case 'voteCount':                        
+                    case 'voteCount':
                         $stmt->bindValue($identifier, $this->votecount, PDO::PARAM_INT);
                         break;
-                    case 'eventID':                        
+                    case 'eventID':
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
                 }
@@ -953,10 +953,10 @@ abstract class Options implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-        
+
         if ($includeForeignObjects) {
             if (null !== $this->aEvents) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'events';
@@ -967,11 +967,11 @@ abstract class Options implements ActiveRecordInterface
                     default:
                         $key = 'Events';
                 }
-        
+
                 $result[$key] = $this->aEvents->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collVotess) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'votess';
@@ -982,7 +982,7 @@ abstract class Options implements ActiveRecordInterface
                     default:
                         $key = 'Votess';
                 }
-        
+
                 $result[$key] = $this->collVotess->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1174,7 +1174,7 @@ abstract class Options implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-        
+
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1449,7 +1449,7 @@ abstract class Options implements ActiveRecordInterface
         /** @var ChildVotes[] $votessToDelete */
         $votessToDelete = $this->getVotess(new Criteria(), $con)->diff($votess);
 
-        
+
         $this->votessScheduledForDeletion = $votessToDelete;
 
         foreach ($votessToDelete as $votesRemoved) {

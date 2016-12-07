@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'votes' table.
  *
- * 
+ *
  *
  * @method     ChildVotesQuery orderByVoteid($order = Criteria::ASC) Order by the voteID column
  * @method     ChildVotesQuery orderByUserid($order = Criteria::ASC) Order by the userID column
@@ -176,7 +176,7 @@ abstract class VotesQuery extends ModelCriteria
     {
         $sql = 'SELECT voteID, userID, optionID FROM votes WHERE voteID = :p0';
         try {
-            $stmt = $con->prepare($sql);            
+            $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -612,9 +612,9 @@ abstract class VotesQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-            
+
             VotesTableMap::removeInstanceFromPool($criteria);
-        
+
             $affectedRows += ModelCriteria::delete($con);
             VotesTableMap::clearRelatedInstancePool();
 

@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'dates' table.
  *
- * 
+ *
  *
  * @method     ChildDatesQuery orderByDate($order = Criteria::ASC) Order by the date column
  * @method     ChildDatesQuery orderBySportid($order = Criteria::ASC) Order by the sportID column
@@ -528,9 +528,9 @@ abstract class DatesQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-            
+
             DatesTableMap::removeInstanceFromPool($criteria);
-        
+
             $affectedRows += ModelCriteria::delete($con);
             DatesTableMap::clearRelatedInstancePool();
 

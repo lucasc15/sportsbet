@@ -27,11 +27,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'dates' table.
  *
- * 
+ *
  *
  * @package    propel.generator..Base
  */
-abstract class Dates implements ActiveRecordInterface 
+abstract class Dates implements ActiveRecordInterface
 {
     /**
      * TableMap class name
@@ -67,21 +67,21 @@ abstract class Dates implements ActiveRecordInterface
 
     /**
      * The value for the date field.
-     * 
+     *
      * @var        DateTime
      */
     protected $date;
 
     /**
      * The value for the sportid field.
-     * 
+     *
      * @var        int
      */
     protected $sportid;
 
     /**
      * The value for the eventid field.
-     * 
+     *
      * @var        int
      */
     protected $eventid;
@@ -321,17 +321,17 @@ abstract class Dates implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-        
+
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-        
+
         return $propertyNames;
     }
 
     /**
      * Get the [optionally formatted] temporal [date] column value.
-     * 
+     *
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -351,7 +351,7 @@ abstract class Dates implements ActiveRecordInterface
 
     /**
      * Get the [sportid] column value.
-     * 
+     *
      * @return int
      */
     public function getSportid()
@@ -361,7 +361,7 @@ abstract class Dates implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     * 
+     *
      * @return int
      */
     public function getEventid()
@@ -371,7 +371,7 @@ abstract class Dates implements ActiveRecordInterface
 
     /**
      * Sets the value of [date] column to a normalized version of the date/time value specified.
-     * 
+     *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\Dates The current object (for fluent API support)
@@ -391,7 +391,7 @@ abstract class Dates implements ActiveRecordInterface
 
     /**
      * Set the value of [sportid] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\Dates The current object (for fluent API support)
      */
@@ -415,7 +415,7 @@ abstract class Dates implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     * 
+     *
      * @param int $v new value
      * @return $this|\Dates The current object (for fluent API support)
      */
@@ -732,13 +732,13 @@ abstract class Dates implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'date':                        
+                    case 'date':
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'sportID':                        
+                    case 'sportID':
                         $stmt->bindValue($identifier, $this->sportid, PDO::PARAM_INT);
                         break;
-                    case 'eventID':                        
+                    case 'eventID':
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
                 }
@@ -842,15 +842,15 @@ abstract class Dates implements ActiveRecordInterface
         if ($result[$keys[0]] instanceof \DateTime) {
             $result[$keys[0]] = $result[$keys[0]]->format('c');
         }
-        
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-        
+
         if ($includeForeignObjects) {
             if (null !== $this->aSports) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'sports';
@@ -861,11 +861,11 @@ abstract class Dates implements ActiveRecordInterface
                     default:
                         $key = 'Sports';
                 }
-        
+
                 $result[$key] = $this->aSports->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aEvents) {
-                
+
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'events';
@@ -876,7 +876,7 @@ abstract class Dates implements ActiveRecordInterface
                     default:
                         $key = 'Events';
                 }
-        
+
                 $result[$key] = $this->aEvents->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1049,7 +1049,7 @@ abstract class Dates implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-        
+
     /**
      * Returns NULL since this table doesn't have a primary key.
      * This method exists only for BC and is deprecated!

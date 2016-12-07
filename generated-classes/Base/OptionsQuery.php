@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'options' table.
  *
- * 
+ *
  *
  * @method     ChildOptionsQuery orderByOptionid($order = Criteria::ASC) Order by the optionID column
  * @method     ChildOptionsQuery orderByText($order = Criteria::ASC) Order by the text column
@@ -186,7 +186,7 @@ abstract class OptionsQuery extends ModelCriteria
     {
         $sql = 'SELECT optionID, text, image, voteCount, eventID FROM options WHERE optionID = :p0';
         try {
-            $stmt = $con->prepare($sql);            
+            $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -666,9 +666,9 @@ abstract class OptionsQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-            
+
             OptionsTableMap::removeInstanceFromPool($criteria);
-        
+
             $affectedRows += ModelCriteria::delete($con);
             OptionsTableMap::clearRelatedInstancePool();
 
