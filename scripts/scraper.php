@@ -78,11 +78,14 @@ class ScheduleScraper {
       $event = EventsQuery::create()
 	->filterByDate($row[$this->hockey_map['date']['col']])
 	->useOptionsQuery() // sub query to filter events with the same options text
-	  ->filterByText($row[$this->hockey_map['option1']['col']],
-			 $row[$this->hockey_map['option2']['col']])
+	  ->filterByText(array(
+			       $row[$this->hockey_map['option1']['col']],
+			       $row[$this->hockey_map['option2']['col']]
+			       )
+		         )
 	->endUse()
-	->with('Options') //Use a join to hit the database only once (i.e. prefect related with join)
-	->find(); // execute query
+	->with('Options') //User a join to hit the databae once only for all related options
+	->find(); // Execute query
       
       /* TODO remove this and put it in the proper query context */
       /* query to get events in the next 'x' days for a $sport */
@@ -94,30 +97,32 @@ class ScheduleScraper {
       
       if (count($event) < 1) {
 	$event = new Events();
-	$event.setTitle($this->getEventTitle($row));
-	$event.setDate($row[$this->hockey_map['date']['col']]);
-	$event.setSport($sport);
+	$event->setTitle($this->getHockeyEventTitle($row));
+	$event->setDate($row[$this->hockey_map['date']['col']]);
+	$event->setSports($sport);
 	
 	$option1 = new Options();
-	$option1.setText($row[$this->hockey_map['option1']['col']]);
-	$option1.setVoteCount(0);
-	$option1.setImage("");
+	$option1->setText($row[$this->hockey_map['option1']['col']]);
+	$option1->setVoteCount(0);
+	$option1->setImage("");
 
-	$option2 = new Option();
-	$option2.setText($row[$this->hockey_map['option2']['col']]);
-	$option2.setVoteCount(0);
-	$option2.setImage("");
-	$event.addOption($option1);
-	$event.addOption($option2);
-	$event.save();
+	$option2 = new Options();
+	$option2->setText($row[$this->hockey_map['option2']['col']]);
+	$option2->setVoteCount(0);
+	$option2->setImage("");
+	$event->addOptions($option1);
+	$event->addOptions($option2);
+	$event->save();
 	
+      } else {
+	$event = $event[0];
       }
-      if ($event->getOptions()[0] == null) {
+      if ($event->getOptionss()[0] == null) {
 	$options = $this->setWinningOption(
 					   $row[$this->hockey_map['option1']['col']],
 					   $row[$this->hockey_map['option2']['col']],
-					   $event->getOptions()[0],
-					   $event->getOptions()[1]
+					   $event->getOptionss()[0],
+					   $event->getOptionss()[1]
 					   );
       }
     }
