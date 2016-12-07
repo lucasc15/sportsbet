@@ -42,6 +42,33 @@ sportsBetApp.controller("LoginController", function($scope, LoginData) {
     $scope.logout = function(username, password) {
         LoginData.logout();
     }
+
+    $scope.register = function(username, password) {
+        LoginData.register(username, password)
+	    .success(function(response) {
+		if (response.errors) {
+		    $scope.errors = errors;
+		}
+	    })
+	    .error(function(error) {
+		$scope.errors = ['Could not process request, please try again'];
+	    });
+    }
+});
+
+sportsBetApp.controller("LeaderboardController", function($scope, LeaderboardData) {
+    $scope.errors = null;
+    $scope.leaderboard = getLeaderboard();
+    
+    function GetLeaderboard() {
+        LeaderboardData.getLeaderboard()
+	    .success(function(response) {
+		$scope.leaderboard = response.leaderboard;
+	    })
+	    .error(function(response){
+		$scope.errors = response.errors;
+	    });
+    }	
 });
 
 		      

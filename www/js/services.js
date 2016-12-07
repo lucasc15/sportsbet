@@ -7,9 +7,6 @@ EventService.factory('EventData', ['$http', function($http) {
     
     EventData.getEvents = function(sport){
 	return $http.get('/api/events/' + sport);
-	//return JSON.parse(
-	//    $http.get("api/events/" + sport)
-	//);
     };
 
     EventData.Vote = function(eventID, optionID) {
@@ -30,8 +27,8 @@ LoginService.factory('LoginData', ['$http', '$localStorage', function ($http, $l
 	    .success(function (response) {
                 if (response.token) {
 		    $localStorage.token = reponse.token;
-		    $localStorage.username = username;
-		    $http.defaults.headers.common.Token = response.Token;
+		    $localStorage.username = response.username;
+		    $http.defaults.headers.common.Token = response.token;
 		}
 	    });
     }	     
@@ -43,5 +40,32 @@ LoginService.factory('LoginData', ['$http', '$localStorage', function ($http, $l
 	
     }
 
+    LoginData.register = function(username, password) {
+        $http.post('/register', {username: username, password: password})
+	    .success(function(response) {
+                if (!response.errors) {
+                    $localStorage.token = response.token;
+		    $localStorage.username = response.username;
+		    $http.defaults.headers.common.Token = reponse.token;
+		}
+	    });
+    }
+
     return LoginData;
 }]);
+
+var LeaderboardService = angular.module("LeaderboardService", [])
+LeaderboardService.factory('LeaderboardData', ['$http', function($http, $localStorage) {
+    var LeaderboardData = {};
+
+    LeaderboardData.getLeaderBoard = function() {
+        if ($localStorage.getItem('username') === null){
+            var username = 'ananymous';
+	} else {
+	    var username = $localStorage.getItem('username');
+	}
+	return $http.get('/api/leaderboard/' + username);
+    }
+    return LeaderboardData;
+}]);
+
