@@ -71,6 +71,13 @@ abstract class Votes implements ActiveRecordInterface
     protected $voteid;
 
     /**
+     * The value for the ipaddress field.
+     *
+     * @var        string
+     */
+    protected $ipaddress;
+
+    /**
      * The value for the userid field.
      *
      * @var        int
@@ -338,6 +345,16 @@ abstract class Votes implements ActiveRecordInterface
     }
 
     /**
+     * Get the [ipaddress] column value.
+     *
+     * @return string
+     */
+    public function getIpaddress()
+    {
+        return $this->ipaddress;
+    }
+
+    /**
      * Get the [userid] column value.
      *
      * @return int
@@ -376,6 +393,26 @@ abstract class Votes implements ActiveRecordInterface
 
         return $this;
     } // setVoteid()
+
+    /**
+     * Set the value of [ipaddress] column.
+     *
+     * @param string $v new value
+     * @return $this|\Votes The current object (for fluent API support)
+     */
+    public function setIpaddress($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->ipaddress !== $v) {
+            $this->ipaddress = $v;
+            $this->modifiedColumns[VotesTableMap::COL_IPADDRESS] = true;
+        }
+
+        return $this;
+    } // setIpaddress()
 
     /**
      * Set the value of [userid] column.
@@ -464,10 +501,13 @@ abstract class Votes implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : VotesTableMap::translateFieldName('Voteid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->voteid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : VotesTableMap::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : VotesTableMap::translateFieldName('Ipaddress', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->ipaddress = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : VotesTableMap::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->userid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : VotesTableMap::translateFieldName('Optionid', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : VotesTableMap::translateFieldName('Optionid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->optionid = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -477,7 +517,7 @@ abstract class Votes implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = VotesTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = VotesTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Votes'), 0, $e);
@@ -704,6 +744,9 @@ abstract class Votes implements ActiveRecordInterface
         if ($this->isColumnModified(VotesTableMap::COL_VOTEID)) {
             $modifiedColumns[':p' . $index++]  = 'voteID';
         }
+        if ($this->isColumnModified(VotesTableMap::COL_IPADDRESS)) {
+            $modifiedColumns[':p' . $index++]  = 'IPAddress';
+        }
         if ($this->isColumnModified(VotesTableMap::COL_USERID)) {
             $modifiedColumns[':p' . $index++]  = 'userID';
         }
@@ -723,6 +766,9 @@ abstract class Votes implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'voteID':
                         $stmt->bindValue($identifier, $this->voteid, PDO::PARAM_INT);
+                        break;
+                    case 'IPAddress':
+                        $stmt->bindValue($identifier, $this->ipaddress, PDO::PARAM_STR);
                         break;
                     case 'userID':
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
@@ -796,9 +842,12 @@ abstract class Votes implements ActiveRecordInterface
                 return $this->getVoteid();
                 break;
             case 1:
-                return $this->getUserid();
+                return $this->getIpaddress();
                 break;
             case 2:
+                return $this->getUserid();
+                break;
+            case 3:
                 return $this->getOptionid();
                 break;
             default:
@@ -832,8 +881,9 @@ abstract class Votes implements ActiveRecordInterface
         $keys = VotesTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getVoteid(),
-            $keys[1] => $this->getUserid(),
-            $keys[2] => $this->getOptionid(),
+            $keys[1] => $this->getIpaddress(),
+            $keys[2] => $this->getUserid(),
+            $keys[3] => $this->getOptionid(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -909,9 +959,12 @@ abstract class Votes implements ActiveRecordInterface
                 $this->setVoteid($value);
                 break;
             case 1:
-                $this->setUserid($value);
+                $this->setIpaddress($value);
                 break;
             case 2:
+                $this->setUserid($value);
+                break;
+            case 3:
                 $this->setOptionid($value);
                 break;
         } // switch()
@@ -944,10 +997,13 @@ abstract class Votes implements ActiveRecordInterface
             $this->setVoteid($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setUserid($arr[$keys[1]]);
+            $this->setIpaddress($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setOptionid($arr[$keys[2]]);
+            $this->setUserid($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setOptionid($arr[$keys[3]]);
         }
     }
 
@@ -992,6 +1048,9 @@ abstract class Votes implements ActiveRecordInterface
 
         if ($this->isColumnModified(VotesTableMap::COL_VOTEID)) {
             $criteria->add(VotesTableMap::COL_VOTEID, $this->voteid);
+        }
+        if ($this->isColumnModified(VotesTableMap::COL_IPADDRESS)) {
+            $criteria->add(VotesTableMap::COL_IPADDRESS, $this->ipaddress);
         }
         if ($this->isColumnModified(VotesTableMap::COL_USERID)) {
             $criteria->add(VotesTableMap::COL_USERID, $this->userid);
@@ -1085,6 +1144,7 @@ abstract class Votes implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setIpaddress($this->getIpaddress());
         $copyObj->setUserid($this->getUserid());
         $copyObj->setOptionid($this->getOptionid());
         if ($makeNew) {
@@ -1231,6 +1291,7 @@ abstract class Votes implements ActiveRecordInterface
             $this->aOptions->removeVotes($this);
         }
         $this->voteid = null;
+        $this->ipaddress = null;
         $this->userid = null;
         $this->optionid = null;
         $this->alreadyInSave = false;

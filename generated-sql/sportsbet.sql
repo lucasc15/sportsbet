@@ -17,27 +17,6 @@ CREATE TABLE `sports`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
--- dates
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `dates`;
-
-CREATE TABLE `dates`
-(
-    `date` DATE NOT NULL,
-    `sportID` INTEGER NOT NULL,
-    `eventID` INTEGER NOT NULL,
-    INDEX `dates_fi_292d25` (`sportID`),
-    INDEX `dates_fi_53757f` (`eventID`),
-    CONSTRAINT `dates_fk_292d25`
-        FOREIGN KEY (`sportID`)
-        REFERENCES `sports` (`sportID`),
-    CONSTRAINT `dates_fk_53757f`
-        FOREIGN KEY (`eventID`)
-        REFERENCES `events` (`eventID`)
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
 -- events
 -- ---------------------------------------------------------------------
 
@@ -46,8 +25,14 @@ DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events`
 (
     `eventID` INTEGER NOT NULL AUTO_INCREMENT,
+    `sportID` INTEGER NOT NULL,
     `title` VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`eventID`)
+    `date` DATE NOT NULL,
+    PRIMARY KEY (`eventID`),
+    INDEX `events_fi_292d25` (`sportID`),
+    CONSTRAINT `events_fk_292d25`
+        FOREIGN KEY (`sportID`)
+        REFERENCES `sports` (`sportID`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -59,10 +44,11 @@ DROP TABLE IF EXISTS `options`;
 CREATE TABLE `options`
 (
     `optionID` INTEGER NOT NULL AUTO_INCREMENT,
+    `eventID` INTEGER NOT NULL,
     `text` VARCHAR(128) NOT NULL,
     `image` VARCHAR(255) NOT NULL,
     `voteCount` INTEGER NOT NULL,
-    `eventID` INTEGER NOT NULL,
+    `correct` TINYINT(1),
     PRIMARY KEY (`optionID`),
     INDEX `options_fi_53757f` (`eventID`),
     CONSTRAINT `options_fk_53757f`
@@ -96,7 +82,8 @@ DROP TABLE IF EXISTS `votes`;
 CREATE TABLE `votes`
 (
     `voteID` INTEGER NOT NULL AUTO_INCREMENT,
-    `userID` INTEGER NOT NULL,
+    `IPAddress` VARCHAR(255) NOT NULL,
+    `userID` INTEGER,
     `optionID` INTEGER NOT NULL,
     PRIMARY KEY (`voteID`),
     INDEX `votes_fi_135423` (`userID`),

@@ -34,17 +34,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildSportsQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildSportsQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildSportsQuery leftJoinDates($relationAlias = null) Adds a LEFT JOIN clause to the query using the Dates relation
- * @method     ChildSportsQuery rightJoinDates($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Dates relation
- * @method     ChildSportsQuery innerJoinDates($relationAlias = null) Adds a INNER JOIN clause to the query using the Dates relation
+ * @method     ChildSportsQuery leftJoinEvents($relationAlias = null) Adds a LEFT JOIN clause to the query using the Events relation
+ * @method     ChildSportsQuery rightJoinEvents($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Events relation
+ * @method     ChildSportsQuery innerJoinEvents($relationAlias = null) Adds a INNER JOIN clause to the query using the Events relation
  *
- * @method     ChildSportsQuery joinWithDates($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Dates relation
+ * @method     ChildSportsQuery joinWithEvents($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Events relation
  *
- * @method     ChildSportsQuery leftJoinWithDates() Adds a LEFT JOIN clause and with to the query using the Dates relation
- * @method     ChildSportsQuery rightJoinWithDates() Adds a RIGHT JOIN clause and with to the query using the Dates relation
- * @method     ChildSportsQuery innerJoinWithDates() Adds a INNER JOIN clause and with to the query using the Dates relation
+ * @method     ChildSportsQuery leftJoinWithEvents() Adds a LEFT JOIN clause and with to the query using the Events relation
+ * @method     ChildSportsQuery rightJoinWithEvents() Adds a RIGHT JOIN clause and with to the query using the Events relation
+ * @method     ChildSportsQuery innerJoinWithEvents() Adds a INNER JOIN clause and with to the query using the Events relation
  *
- * @method     \DatesQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \EventsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildSports findOne(ConnectionInterface $con = null) Return the first ChildSports matching the query
  * @method     ChildSports findOneOrCreate(ConnectionInterface $con = null) Return the first ChildSports matching the query, or a new ChildSports object populated from the query conditions when no match is found
@@ -316,40 +316,40 @@ abstract class SportsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Dates object
+     * Filter the query by a related \Events object
      *
-     * @param \Dates|ObjectCollection $dates the related object to use as filter
+     * @param \Events|ObjectCollection $events the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildSportsQuery The current query, for fluid interface
      */
-    public function filterByDates($dates, $comparison = null)
+    public function filterByEvents($events, $comparison = null)
     {
-        if ($dates instanceof \Dates) {
+        if ($events instanceof \Events) {
             return $this
-                ->addUsingAlias(SportsTableMap::COL_SPORTID, $dates->getSportid(), $comparison);
-        } elseif ($dates instanceof ObjectCollection) {
+                ->addUsingAlias(SportsTableMap::COL_SPORTID, $events->getSportid(), $comparison);
+        } elseif ($events instanceof ObjectCollection) {
             return $this
-                ->useDatesQuery()
-                ->filterByPrimaryKeys($dates->getPrimaryKeys())
+                ->useEventsQuery()
+                ->filterByPrimaryKeys($events->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByDates() only accepts arguments of type \Dates or Collection');
+            throw new PropelException('filterByEvents() only accepts arguments of type \Events or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Dates relation
+     * Adds a JOIN clause to the query using the Events relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildSportsQuery The current query, for fluid interface
      */
-    public function joinDates($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinEvents($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Dates');
+        $relationMap = $tableMap->getRelation('Events');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -364,14 +364,14 @@ abstract class SportsQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Dates');
+            $this->addJoinObject($join, 'Events');
         }
 
         return $this;
     }
 
     /**
-     * Use the Dates relation Dates object
+     * Use the Events relation Events object
      *
      * @see useQuery()
      *
@@ -379,13 +379,13 @@ abstract class SportsQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \DatesQuery A secondary query class using the current class as primary query
+     * @return \EventsQuery A secondary query class using the current class as primary query
      */
-    public function useDatesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useEventsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinDates($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Dates', '\DatesQuery');
+            ->joinEvents($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Events', '\EventsQuery');
     }
 
     /**

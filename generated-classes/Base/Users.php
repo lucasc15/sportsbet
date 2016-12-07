@@ -767,9 +767,10 @@ abstract class Users implements ActiveRecordInterface
 
             if ($this->votessScheduledForDeletion !== null) {
                 if (!$this->votessScheduledForDeletion->isEmpty()) {
-                    \VotesQuery::create()
-                        ->filterByPrimaryKeys($this->votessScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->votessScheduledForDeletion as $votes) {
+                        // need to save related object because we set the relation to null
+                        $votes->save($con);
+                    }
                     $this->votessScheduledForDeletion = null;
                 }
             }
@@ -1515,7 +1516,7 @@ abstract class Users implements ActiveRecordInterface
                 $this->votessScheduledForDeletion = clone $this->collVotess;
                 $this->votessScheduledForDeletion->clear();
             }
-            $this->votessScheduledForDeletion[]= clone $votes;
+            $this->votessScheduledForDeletion[]= $votes;
             $votes->setUsers(null);
         }
 

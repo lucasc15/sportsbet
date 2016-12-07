@@ -498,7 +498,7 @@ abstract class UsersQuery extends ModelCriteria
      *
      * @return $this|ChildUsersQuery The current query, for fluid interface
      */
-    public function joinVotes($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinVotes($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Votes');
@@ -533,7 +533,7 @@ abstract class UsersQuery extends ModelCriteria
      *
      * @return \VotesQuery A secondary query class using the current class as primary query
      */
-    public function useVotesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useVotesQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinVotes($relationAlias, $joinType)

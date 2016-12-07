@@ -2,13 +2,13 @@
 
 namespace Base;
 
-use \Dates as ChildDates;
-use \DatesQuery as ChildDatesQuery;
+use \Events as ChildEvents;
+use \EventsQuery as ChildEventsQuery;
 use \Sports as ChildSports;
 use \SportsQuery as ChildSportsQuery;
 use \Exception;
 use \PDO;
-use Map\DatesTableMap;
+use Map\EventsTableMap;
 use Map\SportsTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -79,10 +79,10 @@ abstract class Sports implements ActiveRecordInterface
     protected $sport;
 
     /**
-     * @var        ObjectCollection|ChildDates[] Collection to store aggregation of ChildDates objects.
+     * @var        ObjectCollection|ChildEvents[] Collection to store aggregation of ChildEvents objects.
      */
-    protected $collDatess;
-    protected $collDatessPartial;
+    protected $collEventss;
+    protected $collEventssPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -94,9 +94,9 @@ abstract class Sports implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildDates[]
+     * @var ObjectCollection|ChildEvents[]
      */
-    protected $datessScheduledForDeletion = null;
+    protected $eventssScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Base\Sports object.
@@ -493,7 +493,7 @@ abstract class Sports implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collDatess = null;
+            $this->collEventss = null;
 
         } // if (deep)
     }
@@ -605,17 +605,17 @@ abstract class Sports implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->datessScheduledForDeletion !== null) {
-                if (!$this->datessScheduledForDeletion->isEmpty()) {
-                    \DatesQuery::create()
-                        ->filterByPrimaryKeys($this->datessScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->eventssScheduledForDeletion !== null) {
+                if (!$this->eventssScheduledForDeletion->isEmpty()) {
+                    \EventsQuery::create()
+                        ->filterByPrimaryKeys($this->eventssScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->datessScheduledForDeletion = null;
+                    $this->eventssScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collDatess !== null) {
-                foreach ($this->collDatess as $referrerFK) {
+            if ($this->collEventss !== null) {
+                foreach ($this->collEventss as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -778,20 +778,20 @@ abstract class Sports implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collDatess) {
+            if (null !== $this->collEventss) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'datess';
+                        $key = 'eventss';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'datess';
+                        $key = 'eventss';
                         break;
                     default:
-                        $key = 'Datess';
+                        $key = 'Eventss';
                 }
 
-                $result[$key] = $this->collDatess->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collEventss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1005,9 +1005,9 @@ abstract class Sports implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getDatess() as $relObj) {
+            foreach ($this->getEventss() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addDates($relObj->copy($deepCopy));
+                    $copyObj->addEvents($relObj->copy($deepCopy));
                 }
             }
 
@@ -1052,37 +1052,37 @@ abstract class Sports implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('Dates' == $relationName) {
-            return $this->initDatess();
+        if ('Events' == $relationName) {
+            return $this->initEventss();
         }
     }
 
     /**
-     * Clears out the collDatess collection
+     * Clears out the collEventss collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addDatess()
+     * @see        addEventss()
      */
-    public function clearDatess()
+    public function clearEventss()
     {
-        $this->collDatess = null; // important to set this to NULL since that means it is uninitialized
+        $this->collEventss = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collDatess collection loaded partially.
+     * Reset is the collEventss collection loaded partially.
      */
-    public function resetPartialDatess($v = true)
+    public function resetPartialEventss($v = true)
     {
-        $this->collDatessPartial = $v;
+        $this->collEventssPartial = $v;
     }
 
     /**
-     * Initializes the collDatess collection.
+     * Initializes the collEventss collection.
      *
-     * By default this just sets the collDatess collection to an empty array (like clearcollDatess());
+     * By default this just sets the collEventss collection to an empty array (like clearcollEventss());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1091,20 +1091,20 @@ abstract class Sports implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initDatess($overrideExisting = true)
+    public function initEventss($overrideExisting = true)
     {
-        if (null !== $this->collDatess && !$overrideExisting) {
+        if (null !== $this->collEventss && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = DatesTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = EventsTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collDatess = new $collectionClassName;
-        $this->collDatess->setModel('\Dates');
+        $this->collEventss = new $collectionClassName;
+        $this->collEventss->setModel('\Events');
     }
 
     /**
-     * Gets an array of ChildDates objects which contain a foreign key that references this object.
+     * Gets an array of ChildEvents objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -1114,108 +1114,108 @@ abstract class Sports implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildDates[] List of ChildDates objects
+     * @return ObjectCollection|ChildEvents[] List of ChildEvents objects
      * @throws PropelException
      */
-    public function getDatess(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getEventss(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collDatessPartial && !$this->isNew();
-        if (null === $this->collDatess || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collDatess) {
+        $partial = $this->collEventssPartial && !$this->isNew();
+        if (null === $this->collEventss || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collEventss) {
                 // return empty collection
-                $this->initDatess();
+                $this->initEventss();
             } else {
-                $collDatess = ChildDatesQuery::create(null, $criteria)
+                $collEventss = ChildEventsQuery::create(null, $criteria)
                     ->filterBySports($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collDatessPartial && count($collDatess)) {
-                        $this->initDatess(false);
+                    if (false !== $this->collEventssPartial && count($collEventss)) {
+                        $this->initEventss(false);
 
-                        foreach ($collDatess as $obj) {
-                            if (false == $this->collDatess->contains($obj)) {
-                                $this->collDatess->append($obj);
+                        foreach ($collEventss as $obj) {
+                            if (false == $this->collEventss->contains($obj)) {
+                                $this->collEventss->append($obj);
                             }
                         }
 
-                        $this->collDatessPartial = true;
+                        $this->collEventssPartial = true;
                     }
 
-                    return $collDatess;
+                    return $collEventss;
                 }
 
-                if ($partial && $this->collDatess) {
-                    foreach ($this->collDatess as $obj) {
+                if ($partial && $this->collEventss) {
+                    foreach ($this->collEventss as $obj) {
                         if ($obj->isNew()) {
-                            $collDatess[] = $obj;
+                            $collEventss[] = $obj;
                         }
                     }
                 }
 
-                $this->collDatess = $collDatess;
-                $this->collDatessPartial = false;
+                $this->collEventss = $collEventss;
+                $this->collEventssPartial = false;
             }
         }
 
-        return $this->collDatess;
+        return $this->collEventss;
     }
 
     /**
-     * Sets a collection of ChildDates objects related by a one-to-many relationship
+     * Sets a collection of ChildEvents objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $datess A Propel collection.
+     * @param      Collection $eventss A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildSports The current object (for fluent API support)
      */
-    public function setDatess(Collection $datess, ConnectionInterface $con = null)
+    public function setEventss(Collection $eventss, ConnectionInterface $con = null)
     {
-        /** @var ChildDates[] $datessToDelete */
-        $datessToDelete = $this->getDatess(new Criteria(), $con)->diff($datess);
+        /** @var ChildEvents[] $eventssToDelete */
+        $eventssToDelete = $this->getEventss(new Criteria(), $con)->diff($eventss);
 
 
-        $this->datessScheduledForDeletion = $datessToDelete;
+        $this->eventssScheduledForDeletion = $eventssToDelete;
 
-        foreach ($datessToDelete as $datesRemoved) {
-            $datesRemoved->setSports(null);
+        foreach ($eventssToDelete as $eventsRemoved) {
+            $eventsRemoved->setSports(null);
         }
 
-        $this->collDatess = null;
-        foreach ($datess as $dates) {
-            $this->addDates($dates);
+        $this->collEventss = null;
+        foreach ($eventss as $events) {
+            $this->addEvents($events);
         }
 
-        $this->collDatess = $datess;
-        $this->collDatessPartial = false;
+        $this->collEventss = $eventss;
+        $this->collEventssPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Dates objects.
+     * Returns the number of related Events objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related Dates objects.
+     * @return int             Count of related Events objects.
      * @throws PropelException
      */
-    public function countDatess(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countEventss(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collDatessPartial && !$this->isNew();
-        if (null === $this->collDatess || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collDatess) {
+        $partial = $this->collEventssPartial && !$this->isNew();
+        if (null === $this->collEventss || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collEventss) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getDatess());
+                return count($this->getEventss());
             }
 
-            $query = ChildDatesQuery::create(null, $criteria);
+            $query = ChildEventsQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -1225,28 +1225,28 @@ abstract class Sports implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collDatess);
+        return count($this->collEventss);
     }
 
     /**
-     * Method called to associate a ChildDates object to this object
-     * through the ChildDates foreign key attribute.
+     * Method called to associate a ChildEvents object to this object
+     * through the ChildEvents foreign key attribute.
      *
-     * @param  ChildDates $l ChildDates
+     * @param  ChildEvents $l ChildEvents
      * @return $this|\Sports The current object (for fluent API support)
      */
-    public function addDates(ChildDates $l)
+    public function addEvents(ChildEvents $l)
     {
-        if ($this->collDatess === null) {
-            $this->initDatess();
-            $this->collDatessPartial = true;
+        if ($this->collEventss === null) {
+            $this->initEventss();
+            $this->collEventssPartial = true;
         }
 
-        if (!$this->collDatess->contains($l)) {
-            $this->doAddDates($l);
+        if (!$this->collEventss->contains($l)) {
+            $this->doAddEvents($l);
 
-            if ($this->datessScheduledForDeletion and $this->datessScheduledForDeletion->contains($l)) {
-                $this->datessScheduledForDeletion->remove($this->datessScheduledForDeletion->search($l));
+            if ($this->eventssScheduledForDeletion and $this->eventssScheduledForDeletion->contains($l)) {
+                $this->eventssScheduledForDeletion->remove($this->eventssScheduledForDeletion->search($l));
             }
         }
 
@@ -1254,57 +1254,32 @@ abstract class Sports implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildDates $dates The ChildDates object to add.
+     * @param ChildEvents $events The ChildEvents object to add.
      */
-    protected function doAddDates(ChildDates $dates)
+    protected function doAddEvents(ChildEvents $events)
     {
-        $this->collDatess[]= $dates;
-        $dates->setSports($this);
+        $this->collEventss[]= $events;
+        $events->setSports($this);
     }
 
     /**
-     * @param  ChildDates $dates The ChildDates object to remove.
+     * @param  ChildEvents $events The ChildEvents object to remove.
      * @return $this|ChildSports The current object (for fluent API support)
      */
-    public function removeDates(ChildDates $dates)
+    public function removeEvents(ChildEvents $events)
     {
-        if ($this->getDatess()->contains($dates)) {
-            $pos = $this->collDatess->search($dates);
-            $this->collDatess->remove($pos);
-            if (null === $this->datessScheduledForDeletion) {
-                $this->datessScheduledForDeletion = clone $this->collDatess;
-                $this->datessScheduledForDeletion->clear();
+        if ($this->getEventss()->contains($events)) {
+            $pos = $this->collEventss->search($events);
+            $this->collEventss->remove($pos);
+            if (null === $this->eventssScheduledForDeletion) {
+                $this->eventssScheduledForDeletion = clone $this->collEventss;
+                $this->eventssScheduledForDeletion->clear();
             }
-            $this->datessScheduledForDeletion[]= clone $dates;
-            $dates->setSports(null);
+            $this->eventssScheduledForDeletion[]= clone $events;
+            $events->setSports(null);
         }
 
         return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Sports is new, it will return
-     * an empty collection; or if this Sports has previously
-     * been saved, it will retrieve related Datess from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Sports.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildDates[] List of ChildDates objects
-     */
-    public function getDatessJoinEvents(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildDatesQuery::create(null, $criteria);
-        $query->joinWith('Events', $joinBehavior);
-
-        return $this->getDatess($query, $con);
     }
 
     /**
@@ -1334,14 +1309,14 @@ abstract class Sports implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collDatess) {
-                foreach ($this->collDatess as $o) {
+            if ($this->collEventss) {
+                foreach ($this->collEventss as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collDatess = null;
+        $this->collEventss = null;
     }
 
     /**

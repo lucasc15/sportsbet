@@ -21,10 +21,14 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  * @method     ChildEventsQuery orderByEventid($order = Criteria::ASC) Order by the eventID column
+ * @method     ChildEventsQuery orderBySportid($order = Criteria::ASC) Order by the sportID column
  * @method     ChildEventsQuery orderByTitle($order = Criteria::ASC) Order by the title column
+ * @method     ChildEventsQuery orderByDate($order = Criteria::ASC) Order by the date column
  *
  * @method     ChildEventsQuery groupByEventid() Group by the eventID column
+ * @method     ChildEventsQuery groupBySportid() Group by the sportID column
  * @method     ChildEventsQuery groupByTitle() Group by the title column
+ * @method     ChildEventsQuery groupByDate() Group by the date column
  *
  * @method     ChildEventsQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildEventsQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -34,15 +38,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventsQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildEventsQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildEventsQuery leftJoinDates($relationAlias = null) Adds a LEFT JOIN clause to the query using the Dates relation
- * @method     ChildEventsQuery rightJoinDates($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Dates relation
- * @method     ChildEventsQuery innerJoinDates($relationAlias = null) Adds a INNER JOIN clause to the query using the Dates relation
+ * @method     ChildEventsQuery leftJoinSports($relationAlias = null) Adds a LEFT JOIN clause to the query using the Sports relation
+ * @method     ChildEventsQuery rightJoinSports($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sports relation
+ * @method     ChildEventsQuery innerJoinSports($relationAlias = null) Adds a INNER JOIN clause to the query using the Sports relation
  *
- * @method     ChildEventsQuery joinWithDates($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Dates relation
+ * @method     ChildEventsQuery joinWithSports($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Sports relation
  *
- * @method     ChildEventsQuery leftJoinWithDates() Adds a LEFT JOIN clause and with to the query using the Dates relation
- * @method     ChildEventsQuery rightJoinWithDates() Adds a RIGHT JOIN clause and with to the query using the Dates relation
- * @method     ChildEventsQuery innerJoinWithDates() Adds a INNER JOIN clause and with to the query using the Dates relation
+ * @method     ChildEventsQuery leftJoinWithSports() Adds a LEFT JOIN clause and with to the query using the Sports relation
+ * @method     ChildEventsQuery rightJoinWithSports() Adds a RIGHT JOIN clause and with to the query using the Sports relation
+ * @method     ChildEventsQuery innerJoinWithSports() Adds a INNER JOIN clause and with to the query using the Sports relation
  *
  * @method     ChildEventsQuery leftJoinOptions($relationAlias = null) Adds a LEFT JOIN clause to the query using the Options relation
  * @method     ChildEventsQuery rightJoinOptions($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Options relation
@@ -54,23 +58,29 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventsQuery rightJoinWithOptions() Adds a RIGHT JOIN clause and with to the query using the Options relation
  * @method     ChildEventsQuery innerJoinWithOptions() Adds a INNER JOIN clause and with to the query using the Options relation
  *
- * @method     \DatesQuery|\OptionsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \SportsQuery|\OptionsQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildEvents findOne(ConnectionInterface $con = null) Return the first ChildEvents matching the query
  * @method     ChildEvents findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEvents matching the query, or a new ChildEvents object populated from the query conditions when no match is found
  *
  * @method     ChildEvents findOneByEventid(int $eventID) Return the first ChildEvents filtered by the eventID column
- * @method     ChildEvents findOneByTitle(string $title) Return the first ChildEvents filtered by the title column *
+ * @method     ChildEvents findOneBySportid(int $sportID) Return the first ChildEvents filtered by the sportID column
+ * @method     ChildEvents findOneByTitle(string $title) Return the first ChildEvents filtered by the title column
+ * @method     ChildEvents findOneByDate(string $date) Return the first ChildEvents filtered by the date column *
 
  * @method     ChildEvents requirePk($key, ConnectionInterface $con = null) Return the ChildEvents by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvents requireOne(ConnectionInterface $con = null) Return the first ChildEvents matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEvents requireOneByEventid(int $eventID) Return the first ChildEvents filtered by the eventID column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEvents requireOneBySportid(int $sportID) Return the first ChildEvents filtered by the sportID column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvents requireOneByTitle(string $title) Return the first ChildEvents filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEvents requireOneByDate(string $date) Return the first ChildEvents filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEvents[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEvents objects based on current ModelCriteria
  * @method     ChildEvents[]|ObjectCollection findByEventid(int $eventID) Return ChildEvents objects filtered by the eventID column
+ * @method     ChildEvents[]|ObjectCollection findBySportid(int $sportID) Return ChildEvents objects filtered by the sportID column
  * @method     ChildEvents[]|ObjectCollection findByTitle(string $title) Return ChildEvents objects filtered by the title column
+ * @method     ChildEvents[]|ObjectCollection findByDate(string $date) Return ChildEvents objects filtered by the date column
  * @method     ChildEvents[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -169,7 +179,7 @@ abstract class EventsQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT eventID, title FROM events WHERE eventID = :p0';
+        $sql = 'SELECT eventID, sportID, title, date FROM events WHERE eventID = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -301,6 +311,49 @@ abstract class EventsQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the sportID column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySportid(1234); // WHERE sportID = 1234
+     * $query->filterBySportid(array(12, 34)); // WHERE sportID IN (12, 34)
+     * $query->filterBySportid(array('min' => 12)); // WHERE sportID > 12
+     * </code>
+     *
+     * @see       filterBySports()
+     *
+     * @param     mixed $sportid The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEventsQuery The current query, for fluid interface
+     */
+    public function filterBySportid($sportid = null, $comparison = null)
+    {
+        if (is_array($sportid)) {
+            $useMinMax = false;
+            if (isset($sportid['min'])) {
+                $this->addUsingAlias(EventsTableMap::COL_SPORTID, $sportid['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($sportid['max'])) {
+                $this->addUsingAlias(EventsTableMap::COL_SPORTID, $sportid['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EventsTableMap::COL_SPORTID, $sportid, $comparison);
+    }
+
+    /**
      * Filter the query on the title column
      *
      * Example usage:
@@ -326,40 +379,87 @@ abstract class EventsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \Dates object
+     * Filter the query on the date column
      *
-     * @param \Dates|ObjectCollection $dates the related object to use as filter
+     * Example usage:
+     * <code>
+     * $query->filterByDate('2011-03-14'); // WHERE date = '2011-03-14'
+     * $query->filterByDate('now'); // WHERE date = '2011-03-14'
+     * $query->filterByDate(array('max' => 'yesterday')); // WHERE date > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $date The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEventsQuery The current query, for fluid interface
+     */
+    public function filterByDate($date = null, $comparison = null)
+    {
+        if (is_array($date)) {
+            $useMinMax = false;
+            if (isset($date['min'])) {
+                $this->addUsingAlias(EventsTableMap::COL_DATE, $date['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($date['max'])) {
+                $this->addUsingAlias(EventsTableMap::COL_DATE, $date['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EventsTableMap::COL_DATE, $date, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \Sports object
+     *
+     * @param \Sports|ObjectCollection $sports The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildEventsQuery The current query, for fluid interface
      */
-    public function filterByDates($dates, $comparison = null)
+    public function filterBySports($sports, $comparison = null)
     {
-        if ($dates instanceof \Dates) {
+        if ($sports instanceof \Sports) {
             return $this
-                ->addUsingAlias(EventsTableMap::COL_EVENTID, $dates->getEventid(), $comparison);
-        } elseif ($dates instanceof ObjectCollection) {
+                ->addUsingAlias(EventsTableMap::COL_SPORTID, $sports->getSportid(), $comparison);
+        } elseif ($sports instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
             return $this
-                ->useDatesQuery()
-                ->filterByPrimaryKeys($dates->getPrimaryKeys())
-                ->endUse();
+                ->addUsingAlias(EventsTableMap::COL_SPORTID, $sports->toKeyValue('PrimaryKey', 'Sportid'), $comparison);
         } else {
-            throw new PropelException('filterByDates() only accepts arguments of type \Dates or Collection');
+            throw new PropelException('filterBySports() only accepts arguments of type \Sports or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Dates relation
+     * Adds a JOIN clause to the query using the Sports relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventsQuery The current query, for fluid interface
      */
-    public function joinDates($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinSports($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Dates');
+        $relationMap = $tableMap->getRelation('Sports');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -374,14 +474,14 @@ abstract class EventsQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Dates');
+            $this->addJoinObject($join, 'Sports');
         }
 
         return $this;
     }
 
     /**
-     * Use the Dates relation Dates object
+     * Use the Sports relation Sports object
      *
      * @see useQuery()
      *
@@ -389,13 +489,13 @@ abstract class EventsQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \DatesQuery A secondary query class using the current class as primary query
+     * @return \SportsQuery A secondary query class using the current class as primary query
      */
-    public function useDatesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useSportsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinDates($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Dates', '\DatesQuery');
+            ->joinSports($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Sports', '\SportsQuery');
     }
 
     /**

@@ -59,7 +59,7 @@ class OptionsTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,12 +69,17 @@ class OptionsTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the optionID field
      */
     const COL_OPTIONID = 'options.optionID';
+
+    /**
+     * the column name for the eventID field
+     */
+    const COL_EVENTID = 'options.eventID';
 
     /**
      * the column name for the text field
@@ -92,9 +97,9 @@ class OptionsTableMap extends TableMap
     const COL_VOTECOUNT = 'options.voteCount';
 
     /**
-     * the column name for the eventID field
+     * the column name for the correct field
      */
-    const COL_EVENTID = 'options.eventID';
+    const COL_CORRECT = 'options.correct';
 
     /**
      * The default string format for model objects of the related table
@@ -108,11 +113,11 @@ class OptionsTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Optionid', 'Text', 'Image', 'Votecount', 'Eventid', ),
-        self::TYPE_CAMELNAME     => array('optionid', 'text', 'image', 'votecount', 'eventid', ),
-        self::TYPE_COLNAME       => array(OptionsTableMap::COL_OPTIONID, OptionsTableMap::COL_TEXT, OptionsTableMap::COL_IMAGE, OptionsTableMap::COL_VOTECOUNT, OptionsTableMap::COL_EVENTID, ),
-        self::TYPE_FIELDNAME     => array('optionID', 'text', 'image', 'voteCount', 'eventID', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Optionid', 'Eventid', 'Text', 'Image', 'Votecount', 'Correct', ),
+        self::TYPE_CAMELNAME     => array('optionid', 'eventid', 'text', 'image', 'votecount', 'correct', ),
+        self::TYPE_COLNAME       => array(OptionsTableMap::COL_OPTIONID, OptionsTableMap::COL_EVENTID, OptionsTableMap::COL_TEXT, OptionsTableMap::COL_IMAGE, OptionsTableMap::COL_VOTECOUNT, OptionsTableMap::COL_CORRECT, ),
+        self::TYPE_FIELDNAME     => array('optionID', 'eventID', 'text', 'image', 'voteCount', 'correct', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -122,11 +127,11 @@ class OptionsTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Optionid' => 0, 'Text' => 1, 'Image' => 2, 'Votecount' => 3, 'Eventid' => 4, ),
-        self::TYPE_CAMELNAME     => array('optionid' => 0, 'text' => 1, 'image' => 2, 'votecount' => 3, 'eventid' => 4, ),
-        self::TYPE_COLNAME       => array(OptionsTableMap::COL_OPTIONID => 0, OptionsTableMap::COL_TEXT => 1, OptionsTableMap::COL_IMAGE => 2, OptionsTableMap::COL_VOTECOUNT => 3, OptionsTableMap::COL_EVENTID => 4, ),
-        self::TYPE_FIELDNAME     => array('optionID' => 0, 'text' => 1, 'image' => 2, 'voteCount' => 3, 'eventID' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Optionid' => 0, 'Eventid' => 1, 'Text' => 2, 'Image' => 3, 'Votecount' => 4, 'Correct' => 5, ),
+        self::TYPE_CAMELNAME     => array('optionid' => 0, 'eventid' => 1, 'text' => 2, 'image' => 3, 'votecount' => 4, 'correct' => 5, ),
+        self::TYPE_COLNAME       => array(OptionsTableMap::COL_OPTIONID => 0, OptionsTableMap::COL_EVENTID => 1, OptionsTableMap::COL_TEXT => 2, OptionsTableMap::COL_IMAGE => 3, OptionsTableMap::COL_VOTECOUNT => 4, OptionsTableMap::COL_CORRECT => 5, ),
+        self::TYPE_FIELDNAME     => array('optionID' => 0, 'eventID' => 1, 'text' => 2, 'image' => 3, 'voteCount' => 4, 'correct' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -147,10 +152,11 @@ class OptionsTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('optionID', 'Optionid', 'INTEGER', true, null, null);
+        $this->addForeignKey('eventID', 'Eventid', 'INTEGER', 'events', 'eventID', true, null, null);
         $this->addColumn('text', 'Text', 'VARCHAR', true, 128, null);
         $this->addColumn('image', 'Image', 'VARCHAR', true, 255, null);
         $this->addColumn('voteCount', 'Votecount', 'INTEGER', true, null, null);
-        $this->addForeignKey('eventID', 'Eventid', 'INTEGER', 'events', 'eventID', true, null, null);
+        $this->addColumn('correct', 'Correct', 'BOOLEAN', false, 1, null);
     } // initialize()
 
     /**
@@ -316,16 +322,18 @@ class OptionsTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(OptionsTableMap::COL_OPTIONID);
+            $criteria->addSelectColumn(OptionsTableMap::COL_EVENTID);
             $criteria->addSelectColumn(OptionsTableMap::COL_TEXT);
             $criteria->addSelectColumn(OptionsTableMap::COL_IMAGE);
             $criteria->addSelectColumn(OptionsTableMap::COL_VOTECOUNT);
-            $criteria->addSelectColumn(OptionsTableMap::COL_EVENTID);
+            $criteria->addSelectColumn(OptionsTableMap::COL_CORRECT);
         } else {
             $criteria->addSelectColumn($alias . '.optionID');
+            $criteria->addSelectColumn($alias . '.eventID');
             $criteria->addSelectColumn($alias . '.text');
             $criteria->addSelectColumn($alias . '.image');
             $criteria->addSelectColumn($alias . '.voteCount');
-            $criteria->addSelectColumn($alias . '.eventID');
+            $criteria->addSelectColumn($alias . '.correct');
         }
     }
 

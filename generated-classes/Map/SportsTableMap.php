@@ -140,13 +140,13 @@ class SportsTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Dates', '\\Dates', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('Events', '\\Events', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':sportID',
     1 => ':sportID',
   ),
-), null, null, 'Datess', false);
+), null, null, 'Eventss', false);
     } // buildRelations()
 
     /**

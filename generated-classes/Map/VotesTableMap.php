@@ -59,7 +59,7 @@ class VotesTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,12 +69,17 @@ class VotesTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the voteID field
      */
     const COL_VOTEID = 'votes.voteID';
+
+    /**
+     * the column name for the IPAddress field
+     */
+    const COL_IPADDRESS = 'votes.IPAddress';
 
     /**
      * the column name for the userID field
@@ -98,11 +103,11 @@ class VotesTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Voteid', 'Userid', 'Optionid', ),
-        self::TYPE_CAMELNAME     => array('voteid', 'userid', 'optionid', ),
-        self::TYPE_COLNAME       => array(VotesTableMap::COL_VOTEID, VotesTableMap::COL_USERID, VotesTableMap::COL_OPTIONID, ),
-        self::TYPE_FIELDNAME     => array('voteID', 'userID', 'optionID', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Voteid', 'Ipaddress', 'Userid', 'Optionid', ),
+        self::TYPE_CAMELNAME     => array('voteid', 'ipaddress', 'userid', 'optionid', ),
+        self::TYPE_COLNAME       => array(VotesTableMap::COL_VOTEID, VotesTableMap::COL_IPADDRESS, VotesTableMap::COL_USERID, VotesTableMap::COL_OPTIONID, ),
+        self::TYPE_FIELDNAME     => array('voteID', 'IPAddress', 'userID', 'optionID', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -112,11 +117,11 @@ class VotesTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Voteid' => 0, 'Userid' => 1, 'Optionid' => 2, ),
-        self::TYPE_CAMELNAME     => array('voteid' => 0, 'userid' => 1, 'optionid' => 2, ),
-        self::TYPE_COLNAME       => array(VotesTableMap::COL_VOTEID => 0, VotesTableMap::COL_USERID => 1, VotesTableMap::COL_OPTIONID => 2, ),
-        self::TYPE_FIELDNAME     => array('voteID' => 0, 'userID' => 1, 'optionID' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Voteid' => 0, 'Ipaddress' => 1, 'Userid' => 2, 'Optionid' => 3, ),
+        self::TYPE_CAMELNAME     => array('voteid' => 0, 'ipaddress' => 1, 'userid' => 2, 'optionid' => 3, ),
+        self::TYPE_COLNAME       => array(VotesTableMap::COL_VOTEID => 0, VotesTableMap::COL_IPADDRESS => 1, VotesTableMap::COL_USERID => 2, VotesTableMap::COL_OPTIONID => 3, ),
+        self::TYPE_FIELDNAME     => array('voteID' => 0, 'IPAddress' => 1, 'userID' => 2, 'optionID' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -137,7 +142,8 @@ class VotesTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('voteID', 'Voteid', 'INTEGER', true, null, null);
-        $this->addForeignKey('userID', 'Userid', 'INTEGER', 'users', 'userID', true, null, null);
+        $this->addColumn('IPAddress', 'Ipaddress', 'VARCHAR', true, 255, null);
+        $this->addForeignKey('userID', 'Userid', 'INTEGER', 'users', 'userID', false, null, null);
         $this->addForeignKey('optionID', 'Optionid', 'INTEGER', 'options', 'optionID', true, null, null);
     } // initialize()
 
@@ -304,10 +310,12 @@ class VotesTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(VotesTableMap::COL_VOTEID);
+            $criteria->addSelectColumn(VotesTableMap::COL_IPADDRESS);
             $criteria->addSelectColumn(VotesTableMap::COL_USERID);
             $criteria->addSelectColumn(VotesTableMap::COL_OPTIONID);
         } else {
             $criteria->addSelectColumn($alias . '.voteID');
+            $criteria->addSelectColumn($alias . '.IPAddress');
             $criteria->addSelectColumn($alias . '.userID');
             $criteria->addSelectColumn($alias . '.optionID');
         }

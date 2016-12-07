@@ -74,6 +74,13 @@ abstract class Options implements ActiveRecordInterface
     protected $optionid;
 
     /**
+     * The value for the eventid field.
+     *
+     * @var        int
+     */
+    protected $eventid;
+
+    /**
      * The value for the text field.
      *
      * @var        string
@@ -95,11 +102,11 @@ abstract class Options implements ActiveRecordInterface
     protected $votecount;
 
     /**
-     * The value for the eventid field.
+     * The value for the correct field.
      *
-     * @var        int
+     * @var        boolean
      */
-    protected $eventid;
+    protected $correct;
 
     /**
      * @var        ChildEvents
@@ -362,6 +369,16 @@ abstract class Options implements ActiveRecordInterface
     }
 
     /**
+     * Get the [eventid] column value.
+     *
+     * @return int
+     */
+    public function getEventid()
+    {
+        return $this->eventid;
+    }
+
+    /**
      * Get the [text] column value.
      *
      * @return string
@@ -392,13 +409,23 @@ abstract class Options implements ActiveRecordInterface
     }
 
     /**
-     * Get the [eventid] column value.
+     * Get the [correct] column value.
      *
-     * @return int
+     * @return boolean
      */
-    public function getEventid()
+    public function getCorrect()
     {
-        return $this->eventid;
+        return $this->correct;
+    }
+
+    /**
+     * Get the [correct] column value.
+     *
+     * @return boolean
+     */
+    public function isCorrect()
+    {
+        return $this->getCorrect();
     }
 
     /**
@@ -420,6 +447,30 @@ abstract class Options implements ActiveRecordInterface
 
         return $this;
     } // setOptionid()
+
+    /**
+     * Set the value of [eventid] column.
+     *
+     * @param int $v new value
+     * @return $this|\Options The current object (for fluent API support)
+     */
+    public function setEventid($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->eventid !== $v) {
+            $this->eventid = $v;
+            $this->modifiedColumns[OptionsTableMap::COL_EVENTID] = true;
+        }
+
+        if ($this->aEvents !== null && $this->aEvents->getEventid() !== $v) {
+            $this->aEvents = null;
+        }
+
+        return $this;
+    } // setEventid()
 
     /**
      * Set the value of [text] column.
@@ -482,28 +533,32 @@ abstract class Options implements ActiveRecordInterface
     } // setVotecount()
 
     /**
-     * Set the value of [eventid] column.
+     * Sets the value of the [correct] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      *
-     * @param int $v new value
+     * @param  boolean|integer|string $v The new value
      * @return $this|\Options The current object (for fluent API support)
      */
-    public function setEventid($v)
+    public function setCorrect($v)
     {
         if ($v !== null) {
-            $v = (int) $v;
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
         }
 
-        if ($this->eventid !== $v) {
-            $this->eventid = $v;
-            $this->modifiedColumns[OptionsTableMap::COL_EVENTID] = true;
-        }
-
-        if ($this->aEvents !== null && $this->aEvents->getEventid() !== $v) {
-            $this->aEvents = null;
+        if ($this->correct !== $v) {
+            $this->correct = $v;
+            $this->modifiedColumns[OptionsTableMap::COL_CORRECT] = true;
         }
 
         return $this;
-    } // setEventid()
+    } // setCorrect()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -544,17 +599,20 @@ abstract class Options implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : OptionsTableMap::translateFieldName('Optionid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->optionid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : OptionsTableMap::translateFieldName('Text', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : OptionsTableMap::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->eventid = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OptionsTableMap::translateFieldName('Text', TableMap::TYPE_PHPNAME, $indexType)];
             $this->text = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OptionsTableMap::translateFieldName('Image', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : OptionsTableMap::translateFieldName('Image', TableMap::TYPE_PHPNAME, $indexType)];
             $this->image = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : OptionsTableMap::translateFieldName('Votecount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : OptionsTableMap::translateFieldName('Votecount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->votecount = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : OptionsTableMap::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->eventid = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : OptionsTableMap::translateFieldName('Correct', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->correct = (null !== $col) ? (boolean) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -563,7 +621,7 @@ abstract class Options implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = OptionsTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = OptionsTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Options'), 0, $e);
@@ -798,6 +856,9 @@ abstract class Options implements ActiveRecordInterface
         if ($this->isColumnModified(OptionsTableMap::COL_OPTIONID)) {
             $modifiedColumns[':p' . $index++]  = 'optionID';
         }
+        if ($this->isColumnModified(OptionsTableMap::COL_EVENTID)) {
+            $modifiedColumns[':p' . $index++]  = 'eventID';
+        }
         if ($this->isColumnModified(OptionsTableMap::COL_TEXT)) {
             $modifiedColumns[':p' . $index++]  = 'text';
         }
@@ -807,8 +868,8 @@ abstract class Options implements ActiveRecordInterface
         if ($this->isColumnModified(OptionsTableMap::COL_VOTECOUNT)) {
             $modifiedColumns[':p' . $index++]  = 'voteCount';
         }
-        if ($this->isColumnModified(OptionsTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventID';
+        if ($this->isColumnModified(OptionsTableMap::COL_CORRECT)) {
+            $modifiedColumns[':p' . $index++]  = 'correct';
         }
 
         $sql = sprintf(
@@ -824,6 +885,9 @@ abstract class Options implements ActiveRecordInterface
                     case 'optionID':
                         $stmt->bindValue($identifier, $this->optionid, PDO::PARAM_INT);
                         break;
+                    case 'eventID':
+                        $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
+                        break;
                     case 'text':
                         $stmt->bindValue($identifier, $this->text, PDO::PARAM_STR);
                         break;
@@ -833,8 +897,8 @@ abstract class Options implements ActiveRecordInterface
                     case 'voteCount':
                         $stmt->bindValue($identifier, $this->votecount, PDO::PARAM_INT);
                         break;
-                    case 'eventID':
-                        $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
+                    case 'correct':
+                        $stmt->bindValue($identifier, (int) $this->correct, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -902,16 +966,19 @@ abstract class Options implements ActiveRecordInterface
                 return $this->getOptionid();
                 break;
             case 1:
-                return $this->getText();
+                return $this->getEventid();
                 break;
             case 2:
-                return $this->getImage();
+                return $this->getText();
                 break;
             case 3:
-                return $this->getVotecount();
+                return $this->getImage();
                 break;
             case 4:
-                return $this->getEventid();
+                return $this->getVotecount();
+                break;
+            case 5:
+                return $this->getCorrect();
                 break;
             default:
                 return null;
@@ -944,10 +1011,11 @@ abstract class Options implements ActiveRecordInterface
         $keys = OptionsTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getOptionid(),
-            $keys[1] => $this->getText(),
-            $keys[2] => $this->getImage(),
-            $keys[3] => $this->getVotecount(),
-            $keys[4] => $this->getEventid(),
+            $keys[1] => $this->getEventid(),
+            $keys[2] => $this->getText(),
+            $keys[3] => $this->getImage(),
+            $keys[4] => $this->getVotecount(),
+            $keys[5] => $this->getCorrect(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1023,16 +1091,19 @@ abstract class Options implements ActiveRecordInterface
                 $this->setOptionid($value);
                 break;
             case 1:
-                $this->setText($value);
+                $this->setEventid($value);
                 break;
             case 2:
-                $this->setImage($value);
+                $this->setText($value);
                 break;
             case 3:
-                $this->setVotecount($value);
+                $this->setImage($value);
                 break;
             case 4:
-                $this->setEventid($value);
+                $this->setVotecount($value);
+                break;
+            case 5:
+                $this->setCorrect($value);
                 break;
         } // switch()
 
@@ -1064,16 +1135,19 @@ abstract class Options implements ActiveRecordInterface
             $this->setOptionid($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setText($arr[$keys[1]]);
+            $this->setEventid($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setImage($arr[$keys[2]]);
+            $this->setText($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setVotecount($arr[$keys[3]]);
+            $this->setImage($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setEventid($arr[$keys[4]]);
+            $this->setVotecount($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setCorrect($arr[$keys[5]]);
         }
     }
 
@@ -1119,6 +1193,9 @@ abstract class Options implements ActiveRecordInterface
         if ($this->isColumnModified(OptionsTableMap::COL_OPTIONID)) {
             $criteria->add(OptionsTableMap::COL_OPTIONID, $this->optionid);
         }
+        if ($this->isColumnModified(OptionsTableMap::COL_EVENTID)) {
+            $criteria->add(OptionsTableMap::COL_EVENTID, $this->eventid);
+        }
         if ($this->isColumnModified(OptionsTableMap::COL_TEXT)) {
             $criteria->add(OptionsTableMap::COL_TEXT, $this->text);
         }
@@ -1128,8 +1205,8 @@ abstract class Options implements ActiveRecordInterface
         if ($this->isColumnModified(OptionsTableMap::COL_VOTECOUNT)) {
             $criteria->add(OptionsTableMap::COL_VOTECOUNT, $this->votecount);
         }
-        if ($this->isColumnModified(OptionsTableMap::COL_EVENTID)) {
-            $criteria->add(OptionsTableMap::COL_EVENTID, $this->eventid);
+        if ($this->isColumnModified(OptionsTableMap::COL_CORRECT)) {
+            $criteria->add(OptionsTableMap::COL_CORRECT, $this->correct);
         }
 
         return $criteria;
@@ -1217,10 +1294,11 @@ abstract class Options implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setEventid($this->getEventid());
         $copyObj->setText($this->getText());
         $copyObj->setImage($this->getImage());
         $copyObj->setVotecount($this->getVotecount());
-        $copyObj->setEventid($this->getEventid());
+        $copyObj->setCorrect($this->getCorrect());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1591,10 +1669,11 @@ abstract class Options implements ActiveRecordInterface
             $this->aEvents->removeOptions($this);
         }
         $this->optionid = null;
+        $this->eventid = null;
         $this->text = null;
         $this->image = null;
         $this->votecount = null;
-        $this->eventid = null;
+        $this->correct = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

@@ -21,16 +21,18 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  * @method     ChildOptionsQuery orderByOptionid($order = Criteria::ASC) Order by the optionID column
+ * @method     ChildOptionsQuery orderByEventid($order = Criteria::ASC) Order by the eventID column
  * @method     ChildOptionsQuery orderByText($order = Criteria::ASC) Order by the text column
  * @method     ChildOptionsQuery orderByImage($order = Criteria::ASC) Order by the image column
  * @method     ChildOptionsQuery orderByVotecount($order = Criteria::ASC) Order by the voteCount column
- * @method     ChildOptionsQuery orderByEventid($order = Criteria::ASC) Order by the eventID column
+ * @method     ChildOptionsQuery orderByCorrect($order = Criteria::ASC) Order by the correct column
  *
  * @method     ChildOptionsQuery groupByOptionid() Group by the optionID column
+ * @method     ChildOptionsQuery groupByEventid() Group by the eventID column
  * @method     ChildOptionsQuery groupByText() Group by the text column
  * @method     ChildOptionsQuery groupByImage() Group by the image column
  * @method     ChildOptionsQuery groupByVotecount() Group by the voteCount column
- * @method     ChildOptionsQuery groupByEventid() Group by the eventID column
+ * @method     ChildOptionsQuery groupByCorrect() Group by the correct column
  *
  * @method     ChildOptionsQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildOptionsQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -66,26 +68,29 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOptions findOneOrCreate(ConnectionInterface $con = null) Return the first ChildOptions matching the query, or a new ChildOptions object populated from the query conditions when no match is found
  *
  * @method     ChildOptions findOneByOptionid(int $optionID) Return the first ChildOptions filtered by the optionID column
+ * @method     ChildOptions findOneByEventid(int $eventID) Return the first ChildOptions filtered by the eventID column
  * @method     ChildOptions findOneByText(string $text) Return the first ChildOptions filtered by the text column
  * @method     ChildOptions findOneByImage(string $image) Return the first ChildOptions filtered by the image column
  * @method     ChildOptions findOneByVotecount(int $voteCount) Return the first ChildOptions filtered by the voteCount column
- * @method     ChildOptions findOneByEventid(int $eventID) Return the first ChildOptions filtered by the eventID column *
+ * @method     ChildOptions findOneByCorrect(boolean $correct) Return the first ChildOptions filtered by the correct column *
 
  * @method     ChildOptions requirePk($key, ConnectionInterface $con = null) Return the ChildOptions by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOptions requireOne(ConnectionInterface $con = null) Return the first ChildOptions matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildOptions requireOneByOptionid(int $optionID) Return the first ChildOptions filtered by the optionID column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOptions requireOneByEventid(int $eventID) Return the first ChildOptions filtered by the eventID column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOptions requireOneByText(string $text) Return the first ChildOptions filtered by the text column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOptions requireOneByImage(string $image) Return the first ChildOptions filtered by the image column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOptions requireOneByVotecount(int $voteCount) Return the first ChildOptions filtered by the voteCount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOptions requireOneByEventid(int $eventID) Return the first ChildOptions filtered by the eventID column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOptions requireOneByCorrect(boolean $correct) Return the first ChildOptions filtered by the correct column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildOptions[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOptions objects based on current ModelCriteria
  * @method     ChildOptions[]|ObjectCollection findByOptionid(int $optionID) Return ChildOptions objects filtered by the optionID column
+ * @method     ChildOptions[]|ObjectCollection findByEventid(int $eventID) Return ChildOptions objects filtered by the eventID column
  * @method     ChildOptions[]|ObjectCollection findByText(string $text) Return ChildOptions objects filtered by the text column
  * @method     ChildOptions[]|ObjectCollection findByImage(string $image) Return ChildOptions objects filtered by the image column
  * @method     ChildOptions[]|ObjectCollection findByVotecount(int $voteCount) Return ChildOptions objects filtered by the voteCount column
- * @method     ChildOptions[]|ObjectCollection findByEventid(int $eventID) Return ChildOptions objects filtered by the eventID column
+ * @method     ChildOptions[]|ObjectCollection findByCorrect(boolean $correct) Return ChildOptions objects filtered by the correct column
  * @method     ChildOptions[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -184,7 +189,7 @@ abstract class OptionsQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT optionID, text, image, voteCount, eventID FROM options WHERE optionID = :p0';
+        $sql = 'SELECT optionID, eventID, text, image, voteCount, correct FROM options WHERE optionID = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -316,6 +321,49 @@ abstract class OptionsQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the eventID column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEventid(1234); // WHERE eventID = 1234
+     * $query->filterByEventid(array(12, 34)); // WHERE eventID IN (12, 34)
+     * $query->filterByEventid(array('min' => 12)); // WHERE eventID > 12
+     * </code>
+     *
+     * @see       filterByEvents()
+     *
+     * @param     mixed $eventid The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildOptionsQuery The current query, for fluid interface
+     */
+    public function filterByEventid($eventid = null, $comparison = null)
+    {
+        if (is_array($eventid)) {
+            $useMinMax = false;
+            if (isset($eventid['min'])) {
+                $this->addUsingAlias(OptionsTableMap::COL_EVENTID, $eventid['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($eventid['max'])) {
+                $this->addUsingAlias(OptionsTableMap::COL_EVENTID, $eventid['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OptionsTableMap::COL_EVENTID, $eventid, $comparison);
+    }
+
+    /**
      * Filter the query on the text column
      *
      * Example usage:
@@ -407,46 +455,30 @@ abstract class OptionsQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the eventID column
+     * Filter the query on the correct column
      *
      * Example usage:
      * <code>
-     * $query->filterByEventid(1234); // WHERE eventID = 1234
-     * $query->filterByEventid(array(12, 34)); // WHERE eventID IN (12, 34)
-     * $query->filterByEventid(array('min' => 12)); // WHERE eventID > 12
+     * $query->filterByCorrect(true); // WHERE correct = true
+     * $query->filterByCorrect('yes'); // WHERE correct = true
      * </code>
      *
-     * @see       filterByEvents()
-     *
-     * @param     mixed $eventid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     boolean|string $correct The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOptionsQuery The current query, for fluid interface
      */
-    public function filterByEventid($eventid = null, $comparison = null)
+    public function filterByCorrect($correct = null, $comparison = null)
     {
-        if (is_array($eventid)) {
-            $useMinMax = false;
-            if (isset($eventid['min'])) {
-                $this->addUsingAlias(OptionsTableMap::COL_EVENTID, $eventid['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($eventid['max'])) {
-                $this->addUsingAlias(OptionsTableMap::COL_EVENTID, $eventid['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
+        if (is_string($correct)) {
+            $correct = in_array(strtolower($correct), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(OptionsTableMap::COL_EVENTID, $eventid, $comparison);
+        return $this->addUsingAlias(OptionsTableMap::COL_CORRECT, $correct, $comparison);
     }
 
     /**

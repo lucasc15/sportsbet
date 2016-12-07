@@ -59,7 +59,7 @@ class EventsTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 2;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class EventsTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 2;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the eventID field
@@ -77,9 +77,19 @@ class EventsTableMap extends TableMap
     const COL_EVENTID = 'events.eventID';
 
     /**
+     * the column name for the sportID field
+     */
+    const COL_SPORTID = 'events.sportID';
+
+    /**
      * the column name for the title field
      */
     const COL_TITLE = 'events.title';
+
+    /**
+     * the column name for the date field
+     */
+    const COL_DATE = 'events.date';
 
     /**
      * The default string format for model objects of the related table
@@ -93,11 +103,11 @@ class EventsTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Eventid', 'Title', ),
-        self::TYPE_CAMELNAME     => array('eventid', 'title', ),
-        self::TYPE_COLNAME       => array(EventsTableMap::COL_EVENTID, EventsTableMap::COL_TITLE, ),
-        self::TYPE_FIELDNAME     => array('eventID', 'title', ),
-        self::TYPE_NUM           => array(0, 1, )
+        self::TYPE_PHPNAME       => array('Eventid', 'Sportid', 'Title', 'Date', ),
+        self::TYPE_CAMELNAME     => array('eventid', 'sportid', 'title', 'date', ),
+        self::TYPE_COLNAME       => array(EventsTableMap::COL_EVENTID, EventsTableMap::COL_SPORTID, EventsTableMap::COL_TITLE, EventsTableMap::COL_DATE, ),
+        self::TYPE_FIELDNAME     => array('eventID', 'sportID', 'title', 'date', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -107,11 +117,11 @@ class EventsTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Eventid' => 0, 'Title' => 1, ),
-        self::TYPE_CAMELNAME     => array('eventid' => 0, 'title' => 1, ),
-        self::TYPE_COLNAME       => array(EventsTableMap::COL_EVENTID => 0, EventsTableMap::COL_TITLE => 1, ),
-        self::TYPE_FIELDNAME     => array('eventID' => 0, 'title' => 1, ),
-        self::TYPE_NUM           => array(0, 1, )
+        self::TYPE_PHPNAME       => array('Eventid' => 0, 'Sportid' => 1, 'Title' => 2, 'Date' => 3, ),
+        self::TYPE_CAMELNAME     => array('eventid' => 0, 'sportid' => 1, 'title' => 2, 'date' => 3, ),
+        self::TYPE_COLNAME       => array(EventsTableMap::COL_EVENTID => 0, EventsTableMap::COL_SPORTID => 1, EventsTableMap::COL_TITLE => 2, EventsTableMap::COL_DATE => 3, ),
+        self::TYPE_FIELDNAME     => array('eventID' => 0, 'sportID' => 1, 'title' => 2, 'date' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -132,7 +142,9 @@ class EventsTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('eventID', 'Eventid', 'INTEGER', true, null, null);
+        $this->addForeignKey('sportID', 'Sportid', 'INTEGER', 'sports', 'sportID', true, null, null);
         $this->addColumn('title', 'Title', 'VARCHAR', true, 255, null);
+        $this->addColumn('date', 'Date', 'DATE', true, null, null);
     } // initialize()
 
     /**
@@ -140,13 +152,13 @@ class EventsTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Dates', '\\Dates', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('Sports', '\\Sports', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':eventID',
-    1 => ':eventID',
+    0 => ':sportID',
+    1 => ':sportID',
   ),
-), null, null, 'Datess', false);
+), null, null, null, false);
         $this->addRelation('Options', '\\Options', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -298,10 +310,14 @@ class EventsTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(EventsTableMap::COL_EVENTID);
+            $criteria->addSelectColumn(EventsTableMap::COL_SPORTID);
             $criteria->addSelectColumn(EventsTableMap::COL_TITLE);
+            $criteria->addSelectColumn(EventsTableMap::COL_DATE);
         } else {
             $criteria->addSelectColumn($alias . '.eventID');
+            $criteria->addSelectColumn($alias . '.sportID');
             $criteria->addSelectColumn($alias . '.title');
+            $criteria->addSelectColumn($alias . '.date');
         }
     }
 

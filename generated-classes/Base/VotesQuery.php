@@ -21,10 +21,12 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  * @method     ChildVotesQuery orderByVoteid($order = Criteria::ASC) Order by the voteID column
+ * @method     ChildVotesQuery orderByIpaddress($order = Criteria::ASC) Order by the IPAddress column
  * @method     ChildVotesQuery orderByUserid($order = Criteria::ASC) Order by the userID column
  * @method     ChildVotesQuery orderByOptionid($order = Criteria::ASC) Order by the optionID column
  *
  * @method     ChildVotesQuery groupByVoteid() Group by the voteID column
+ * @method     ChildVotesQuery groupByIpaddress() Group by the IPAddress column
  * @method     ChildVotesQuery groupByUserid() Group by the userID column
  * @method     ChildVotesQuery groupByOptionid() Group by the optionID column
  *
@@ -62,6 +64,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildVotes findOneOrCreate(ConnectionInterface $con = null) Return the first ChildVotes matching the query, or a new ChildVotes object populated from the query conditions when no match is found
  *
  * @method     ChildVotes findOneByVoteid(int $voteID) Return the first ChildVotes filtered by the voteID column
+ * @method     ChildVotes findOneByIpaddress(string $IPAddress) Return the first ChildVotes filtered by the IPAddress column
  * @method     ChildVotes findOneByUserid(int $userID) Return the first ChildVotes filtered by the userID column
  * @method     ChildVotes findOneByOptionid(int $optionID) Return the first ChildVotes filtered by the optionID column *
 
@@ -69,11 +72,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildVotes requireOne(ConnectionInterface $con = null) Return the first ChildVotes matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildVotes requireOneByVoteid(int $voteID) Return the first ChildVotes filtered by the voteID column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildVotes requireOneByIpaddress(string $IPAddress) Return the first ChildVotes filtered by the IPAddress column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildVotes requireOneByUserid(int $userID) Return the first ChildVotes filtered by the userID column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildVotes requireOneByOptionid(int $optionID) Return the first ChildVotes filtered by the optionID column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildVotes[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildVotes objects based on current ModelCriteria
  * @method     ChildVotes[]|ObjectCollection findByVoteid(int $voteID) Return ChildVotes objects filtered by the voteID column
+ * @method     ChildVotes[]|ObjectCollection findByIpaddress(string $IPAddress) Return ChildVotes objects filtered by the IPAddress column
  * @method     ChildVotes[]|ObjectCollection findByUserid(int $userID) Return ChildVotes objects filtered by the userID column
  * @method     ChildVotes[]|ObjectCollection findByOptionid(int $optionID) Return ChildVotes objects filtered by the optionID column
  * @method     ChildVotes[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -174,7 +179,7 @@ abstract class VotesQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT voteID, userID, optionID FROM votes WHERE voteID = :p0';
+        $sql = 'SELECT voteID, IPAddress, userID, optionID FROM votes WHERE voteID = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -306,6 +311,31 @@ abstract class VotesQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the IPAddress column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIpaddress('fooValue');   // WHERE IPAddress = 'fooValue'
+     * $query->filterByIpaddress('%fooValue%', Criteria::LIKE); // WHERE IPAddress LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $ipaddress The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildVotesQuery The current query, for fluid interface
+     */
+    public function filterByIpaddress($ipaddress = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($ipaddress)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(VotesTableMap::COL_IPADDRESS, $ipaddress, $comparison);
+    }
+
+    /**
      * Filter the query on the userID column
      *
      * Example usage:
@@ -426,7 +456,7 @@ abstract class VotesQuery extends ModelCriteria
      *
      * @return $this|ChildVotesQuery The current query, for fluid interface
      */
-    public function joinUsers($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinUsers($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Users');
@@ -461,7 +491,7 @@ abstract class VotesQuery extends ModelCriteria
      *
      * @return \UsersQuery A secondary query class using the current class as primary query
      */
-    public function useUsersQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUsersQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinUsers($relationAlias, $joinType)
