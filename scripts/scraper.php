@@ -117,10 +117,10 @@ class ScheduleScraper {
       } else {
 	$event = $event[0];
       }
-      if ($event->getOptionss()[0] == null) {
+      if ($event->getOptionss()[0]->getCorrect() == null) {
 	$options = $this->setWinningOption(
-					   $row[$this->hockey_map['option1']['col']],
-					   $row[$this->hockey_map['option2']['col']],
+					   $row[$this->hockey_map['option1Score']['col']],
+					   $row[$this->hockey_map['option2Score']['col']],
 					   $event->getOptionss()[0],
 					   $event->getOptionss()[1]
 					   );
@@ -134,17 +134,17 @@ class ScheduleScraper {
   
   /* Function calculate the winning option based on the scores given */
   function setWinningOption($option1Val, $option2Val, $option1, $option2) {
-    if($row[$this->hockey_map['option1']['col']] != '' && $row[$this->hockey_map['option2']['col']]) {
-      if ((int)$row[$this->hockey_map['option1']['col']] > (int)$row[$this->hockey_map['option2']['col']]) {
-	    $option1->correct = true;
-	    $option2->correct = false;
+    if($option1Val != '' && $option2Val != '') {
+      if ((int)$option1Val > (int)$option2Val) {
+	$option1->setCorrect(true);
+	$option2->setCorrect(false);
       } else {
-	    $option1->correct = false;
-	    $option2->correct = true;
+	$option1->setCorrect(false);
+	$option2->setCorrect(true);
       }
     } else {
-	  $option1->correct = null;
-	  $option2->correct = null;
+      $option1->setCorrect(null);
+      $option2->setCorrect(null);
 	  
     }
     $option1->save();
