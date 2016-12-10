@@ -2,6 +2,7 @@
 // Needs to be instatiated like controller.sport = sport to interact with the API
 sportsBetApp.controller("EventController", function($scope, EventData) {
     $scope.events;
+    $scope.sport="hockey";
     $scope.status = null;
     GetEvents();
 
