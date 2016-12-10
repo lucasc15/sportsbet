@@ -18,11 +18,13 @@
                    
                         <p>{{ statuses[option.optionID] }}</p>
                     </div>
-                        <div ng-hide="statuses[option.optionID]"> 
-                    <p>{{ option.text | capitalize}}
+                    <div ng-hide="errors[option.optionID]"> 
+                      <p>{{ option.text | capitalize}}
                         {{ option.voteCount }}
                         <a href="" class="myButton">VOTE</a>
-                        <img src="{{ option.image }}"/> </p> </div>
+                        <img src="{{ option.image }}"/>
+		      </p>
+		    </div>
                     <!-- took out <p> tags -->
                 </div>
             </div>
