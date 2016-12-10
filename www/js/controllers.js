@@ -22,8 +22,8 @@ sportsBetApp.controller("EventController", function($scope, EventData) {
 	    .success(function() {
 		$scope.status = null;
 	    })
-	    .error(function (error) {
-		$scope.status = "Error";
+	    .error(function (reponse) {
+		$scope.status = reponse.error;
 	    });
     }
 });

@@ -13,7 +13,7 @@ EventService.factory('EventData', ['$http', function($http) {
     };
 
     EventData.Vote = function(eventID, optionID) {
-	return $http.post("vote/", {"eventID": eventID, "optionID": optionID});
+	return $http.post("/api/vote/" + optionID, {"user_id": '', "event_id": eventID});
     }
 
     return EventData;

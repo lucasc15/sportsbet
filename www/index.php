@@ -1,11 +1,11 @@
 <?php
-use \Config;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 require '../vendor/autoload.php';
 require_once('config.php');
 require_once('test_event_response.php');
+require_once('vote.php');
 
 $CONFIG = new Config\Config();
 
@@ -58,7 +58,7 @@ $app->get('/api/events/{sport}', function($request, $response, $args) {
 	    ->write($TestDataResponse);
 	}
     } else {
-        $response.setStatus(404);
+      return $response->withStatus(404);
     }
 });
 
@@ -68,7 +68,7 @@ $app->get('/login', function($request, $response, $args) {
 
 $app->post('/login', function($request, $response, $args) {
     /*Stub*/
-    $response.setStatus(200);
+    $response->withStatus(200);
 });
 
 $app->get('/register', function($request, $response, $args) {
@@ -76,22 +76,22 @@ $app->get('/register', function($request, $response, $args) {
   })->setName('register');
 
 $app->post('/register', function($request, $response, $args) {
-    $data = $request->getPostBody();
-    $response.setStatus(200);
+    $data = $request->getBody();
+    $response->withStatus(200);
 });
 
-$app->post('/vote/{event_id}', function($request, $response, $args) {
-    $data = $request->getPostBody();
-    /*$event_id = $args['event_id'];
-    $options_id = $data['option_id'];
-    // have a login to set a cookie
-    $user_id = $app->getCookie('user_id');
-    if (!isset($user_id)){
-      user_id = ANON_USER_ID;
-    }*/
-    /* Logic to update database here, store new optionID for an event
-    // Also need to log IP addresses for an event: I think $_SERVER['REMOTE_ADDR'] works
-    // Could also write   request::getIp();  ? */
+$app->post('/api/vote/{option_id}', function($request, $response, $args) {
+    $data = $request->getParsedBody(); //TODO get username here when implemented
+    $user_id = null; // haven't implemented users yet
+    $ip_address = $_SERVER['REMOTE_ADDR'];
+    $vote = new VoteRegister();
+    $error = $vote->Vote($user_id, $args['option_id'], $data['event_id'], $_SERVER['REMOTE_ADDR']);
+    if ($error === '') {
+      return $response->withStatus(200);
+    } else {
+      return $response->withStatus(403)
+	->withJson(array("error" => $error));
+    }
 });
 
 $app->run();
