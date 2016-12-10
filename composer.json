@@ -5,7 +5,6 @@
 	"propel/propel": "~2.0@dev",
         "monolog/monolog": "^1.22",
         "firebase/php-jwt": "^4.0"
-        "propel/propel": "~2.0@dev"
     },
     "autoload": {
         "classmap": ["generated-classes/"]
