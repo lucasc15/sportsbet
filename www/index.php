@@ -90,7 +90,10 @@ $app->post('/api/vote/{option_id}', function($request, $response, $args) {
       return $response->withStatus(200);
     } else {
       return $response->withStatus(403)
-	->withJson(array("error" => $error));
+	->withJson(array(
+			 "error" => $error,
+			 "option_id" => $args['option_id']
+			 ));
     }
 });
 

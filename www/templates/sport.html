@@ -6,26 +6,20 @@
     <div spa-sport app-sport=" {{ sport }} "></div>
     {% verbatim %}
     <h1> {{sport | capitalize }}</h1>
-
     <div ng-repeat="item in events.dates">
         <div ng-repeat="(date, eventList) in item">
             <h2>{{ date }}</h2>
             <div ng-repeat="event in eventList">
-
                 <h3>{{ event.title }} </h3>            
-
-
-
                 <div ng-repeat="option in event.options">
                     <button ng-click="vote(event.eventID, option.optionID)" /> 
-                    <input type="checkbox" ng-model="error">
-                    <div ng-show="error" >
+                    <div ng-show="errors[option.optionID]">
                         <h1>Error</h1>
-                        <p>You have already voted</p>
+                        <p>{{ statuses[option.optionID] }}</p>
                     </div>
                     <p>{{ option.text | capitalize}}
                         {{ option.voteCount }}
-                        <a href="#" class="myButton">VOTE</a>
+                        <a href="" class="myButton">VOTE</a>
                         <img src="{{ option.image }}"/> </p>
                     <!-- took out <p> tags -->
                 </div>
