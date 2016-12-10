@@ -15,12 +15,14 @@
                     <button ng-click="vote(event.eventID, option.optionID)" /> 
                     <div ng-show="errors[option.optionID]">
                         <h1>Error</h1>
+                   
                         <p>{{ statuses[option.optionID] }}</p>
                     </div>
+                        <div ng-hide="statuses[option.optionID]"> 
                     <p>{{ option.text | capitalize}}
                         {{ option.voteCount }}
                         <a href="" class="myButton">VOTE</a>
-                        <img src="{{ option.image }}"/> </p>
+                        <img src="{{ option.image }}"/> </p> </div>
                     <!-- took out <p> tags -->
                 </div>
             </div>
