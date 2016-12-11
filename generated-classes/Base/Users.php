@@ -26,11 +26,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'users' table.
  *
- *
+ * 
  *
  * @package    propel.generator..Base
  */
-abstract class Users implements ActiveRecordInterface
+abstract class Users implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -66,42 +66,42 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * The value for the userid field.
-     *
+     * 
      * @var        int
      */
     protected $userid;
 
     /**
      * The value for the username field.
-     *
+     * 
      * @var        string
      */
     protected $username;
 
     /**
      * The value for the email field.
-     *
+     * 
      * @var        string
      */
     protected $email;
 
     /**
      * The value for the password field.
-     *
+     * 
      * @var        string
      */
     protected $password;
 
     /**
      * The value for the correct field.
-     *
+     * 
      * @var        int
      */
     protected $correct;
 
     /**
      * The value for the incorrect field.
-     *
+     * 
      * @var        int
      */
     protected $incorrect;
@@ -343,17 +343,17 @@ abstract class Users implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [userid] column value.
-     *
+     * 
      * @return int
      */
     public function getUserid()
@@ -363,7 +363,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Get the [username] column value.
-     *
+     * 
      * @return string
      */
     public function getUsername()
@@ -373,7 +373,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Get the [email] column value.
-     *
+     * 
      * @return string
      */
     public function getEmail()
@@ -383,7 +383,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Get the [password] column value.
-     *
+     * 
      * @return string
      */
     public function getPassword()
@@ -393,7 +393,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Get the [correct] column value.
-     *
+     * 
      * @return int
      */
     public function getCorrect()
@@ -403,7 +403,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Get the [incorrect] column value.
-     *
+     * 
      * @return int
      */
     public function getIncorrect()
@@ -413,7 +413,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Set the value of [userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\Users The current object (for fluent API support)
      */
@@ -433,7 +433,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Set the value of [username] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Users The current object (for fluent API support)
      */
@@ -453,7 +453,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Set the value of [email] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Users The current object (for fluent API support)
      */
@@ -473,7 +473,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Set the value of [password] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Users The current object (for fluent API support)
      */
@@ -493,7 +493,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Set the value of [correct] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\Users The current object (for fluent API support)
      */
@@ -513,7 +513,7 @@ abstract class Users implements ActiveRecordInterface
 
     /**
      * Set the value of [incorrect] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\Users The current object (for fluent API support)
      */
@@ -838,22 +838,22 @@ abstract class Users implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'userID':
+                    case 'userID':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'username':
+                    case 'username':                        
                         $stmt->bindValue($identifier, $this->username, PDO::PARAM_STR);
                         break;
-                    case 'email':
+                    case 'email':                        
                         $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
                         break;
-                    case 'password':
+                    case 'password':                        
                         $stmt->bindValue($identifier, $this->password, PDO::PARAM_STR);
                         break;
-                    case 'correct':
+                    case 'correct':                        
                         $stmt->bindValue($identifier, $this->correct, PDO::PARAM_INT);
                         break;
-                    case 'incorrect':
+                    case 'incorrect':                        
                         $stmt->bindValue($identifier, $this->incorrect, PDO::PARAM_INT);
                         break;
                 }
@@ -977,10 +977,10 @@ abstract class Users implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collVotess) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'votess';
@@ -991,7 +991,7 @@ abstract class Users implements ActiveRecordInterface
                     default:
                         $key = 'Votess';
                 }
-
+        
                 $result[$key] = $this->collVotess->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1192,7 +1192,7 @@ abstract class Users implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1417,7 +1417,7 @@ abstract class Users implements ActiveRecordInterface
         /** @var ChildVotes[] $votessToDelete */
         $votessToDelete = $this->getVotess(new Criteria(), $con)->diff($votess);
 
-
+        
         $this->votessScheduledForDeletion = $votessToDelete;
 
         foreach ($votessToDelete as $votesRemoved) {

@@ -1,15 +1,20 @@
 <?php
-use \Config;
+//use \Config;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 require '../vendor/autoload.php';
 require_once('config.php');
 require_once('test_event_response.php');
+require_once('EventsApiHandler.php');
 
 $CONFIG = new Config\Config();
 
-$app = new \Slim\App;
+$app = new \Slim\App(['settings' => [
+    // Slim Settings
+    'determineRouteBeforeAppMiddleware' => true,
+    'displayErrorDetails' => true,
+    'addContentLengthHeader' => false,]]);
 
 $container = $app->getContainer();
 $container['view'] = function ($container) {
@@ -46,16 +51,15 @@ $app->get('/sports/{sport}', function($request, $response, $args) {
 })->setName('sport');
 
 $app->get('/api/events/{sport}', function($request, $response, $args) {
-    global $CONFIG, $TestDataResponse;
+    global $CONFIG;//, $TestDataResponse;
     if ($CONFIG->IsSport($args['sport'])){
       if ($args['sport'] == 'hockey') {
-	  header("Content-Type: application/json");
-	  $out = fopen(__DIR__."/test_response.json", "w");
-	  fwrite($out, $TestDataResponse);
-	  fclose($out);
-	  return $response->withStatus(200)
-	    ->withHeader('Content-type', 'application/json')
-	    ->write($TestDataResponse);
+        $events_api = new EventsAPIHandler();
+        $events = $events_api->GetEvents($args['sport']);
+	    header("Content-Type: application/json");
+	    return $response->withStatus(200)
+	      ->withHeader('Content-type', 'application/json')
+	      ->withJson($events);
 	}
     } else {
         $response.setStatus(404);

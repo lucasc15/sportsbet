@@ -30,11 +30,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'events' table.
  *
- *
+ * 
  *
  * @package    propel.generator..Base
  */
-abstract class Events implements ActiveRecordInterface
+abstract class Events implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -70,28 +70,28 @@ abstract class Events implements ActiveRecordInterface
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the sportid field.
-     *
+     * 
      * @var        int
      */
     protected $sportid;
 
     /**
      * The value for the title field.
-     *
+     * 
      * @var        string
      */
     protected $title;
 
     /**
      * The value for the date field.
-     *
+     * 
      * @var        DateTime
      */
     protected $date;
@@ -338,17 +338,17 @@ abstract class Events implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -358,7 +358,7 @@ abstract class Events implements ActiveRecordInterface
 
     /**
      * Get the [sportid] column value.
-     *
+     * 
      * @return int
      */
     public function getSportid()
@@ -368,7 +368,7 @@ abstract class Events implements ActiveRecordInterface
 
     /**
      * Get the [title] column value.
-     *
+     * 
      * @return string
      */
     public function getTitle()
@@ -378,7 +378,7 @@ abstract class Events implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [date] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -398,7 +398,7 @@ abstract class Events implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\Events The current object (for fluent API support)
      */
@@ -418,7 +418,7 @@ abstract class Events implements ActiveRecordInterface
 
     /**
      * Set the value of [sportid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\Events The current object (for fluent API support)
      */
@@ -442,7 +442,7 @@ abstract class Events implements ActiveRecordInterface
 
     /**
      * Set the value of [title] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Events The current object (for fluent API support)
      */
@@ -462,7 +462,7 @@ abstract class Events implements ActiveRecordInterface
 
     /**
      * Sets the value of [date] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\Events The current object (for fluent API support)
@@ -793,16 +793,16 @@ abstract class Events implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'eventID':
+                    case 'eventID':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'sportID':
+                    case 'sportID':                        
                         $stmt->bindValue($identifier, $this->sportid, PDO::PARAM_INT);
                         break;
-                    case 'title':
+                    case 'title':                        
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case 'date':
+                    case 'date':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
@@ -917,15 +917,15 @@ abstract class Events implements ActiveRecordInterface
         if ($result[$keys[3]] instanceof \DateTime) {
             $result[$keys[3]] = $result[$keys[3]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aSports) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'sports';
@@ -936,11 +936,11 @@ abstract class Events implements ActiveRecordInterface
                     default:
                         $key = 'Sports';
                 }
-
+        
                 $result[$key] = $this->aSports->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collOptionss) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'optionss';
@@ -951,7 +951,7 @@ abstract class Events implements ActiveRecordInterface
                     default:
                         $key = 'Optionss';
                 }
-
+        
                 $result[$key] = $this->collOptionss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1134,7 +1134,7 @@ abstract class Events implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1408,7 +1408,7 @@ abstract class Events implements ActiveRecordInterface
         /** @var ChildOptions[] $optionssToDelete */
         $optionssToDelete = $this->getOptionss(new Criteria(), $con)->diff($optionss);
 
-
+        
         $this->optionssScheduledForDeletion = $optionssToDelete;
 
         foreach ($optionssToDelete as $optionsRemoved) {
