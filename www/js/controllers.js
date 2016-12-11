@@ -23,6 +23,7 @@ sportsBetApp.controller("EventController", function($scope, $timeout, EventData)
 	EventData.Vote(eventID, optionID)
 	    .success(function() {
 		$scope.status = null;
+		GetEvents();
 	    })
 	    .error(function (response) {
 		var option_id = String(response.option_id);
