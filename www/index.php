@@ -4,7 +4,6 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 require '../vendor/autoload.php';
 require_once('config.php');
-require_once('test_event_response.php');
 require_once('vote.php');
 require_once('EventsApiHandler.php');
 
