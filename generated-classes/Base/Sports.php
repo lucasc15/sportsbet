@@ -26,11 +26,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'sports' table.
  *
- *
+ * 
  *
  * @package    propel.generator..Base
  */
-abstract class Sports implements ActiveRecordInterface
+abstract class Sports implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -66,14 +66,14 @@ abstract class Sports implements ActiveRecordInterface
 
     /**
      * The value for the sportid field.
-     *
+     * 
      * @var        int
      */
     protected $sportid;
 
     /**
      * The value for the sport field.
-     *
+     * 
      * @var        string
      */
     protected $sport;
@@ -315,17 +315,17 @@ abstract class Sports implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [sportid] column value.
-     *
+     * 
      * @return int
      */
     public function getSportid()
@@ -335,7 +335,7 @@ abstract class Sports implements ActiveRecordInterface
 
     /**
      * Get the [sport] column value.
-     *
+     * 
      * @return string
      */
     public function getSport()
@@ -345,7 +345,7 @@ abstract class Sports implements ActiveRecordInterface
 
     /**
      * Set the value of [sportid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\Sports The current object (for fluent API support)
      */
@@ -365,7 +365,7 @@ abstract class Sports implements ActiveRecordInterface
 
     /**
      * Set the value of [sport] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\Sports The current object (for fluent API support)
      */
@@ -665,10 +665,10 @@ abstract class Sports implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'sportID':
+                    case 'sportID':                        
                         $stmt->bindValue($identifier, $this->sportid, PDO::PARAM_INT);
                         break;
-                    case 'sport':
+                    case 'sport':                        
                         $stmt->bindValue($identifier, $this->sport, PDO::PARAM_STR);
                         break;
                 }
@@ -776,10 +776,10 @@ abstract class Sports implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collEventss) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventss';
@@ -790,7 +790,7 @@ abstract class Sports implements ActiveRecordInterface
                     default:
                         $key = 'Eventss';
                 }
-
+        
                 $result[$key] = $this->collEventss->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -955,7 +955,7 @@ abstract class Sports implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1176,7 +1176,7 @@ abstract class Sports implements ActiveRecordInterface
         /** @var ChildEvents[] $eventssToDelete */
         $eventssToDelete = $this->getEventss(new Criteria(), $con)->diff($eventss);
 
-
+        
         $this->eventssScheduledForDeletion = $eventssToDelete;
 
         foreach ($eventssToDelete as $eventsRemoved) {

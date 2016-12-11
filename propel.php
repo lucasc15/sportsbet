@@ -9,7 +9,7 @@ return [
                     'classname'  => 'Propel\Runtime\Connection\ConnectionWrapper',
                     'dsn'        => 'mysql:host=localhost;dbname=sportsbet',
                     'user'       => 'root',
-                    'password'   => 'findeze',
+                    'password'   => 'batman123456',
                     'attributes' => []
                 ]
             ]

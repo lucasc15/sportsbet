@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'events' table.
  *
- *
+ * 
  *
  * @method     ChildEventsQuery orderByEventid($order = Criteria::ASC) Order by the eventID column
  * @method     ChildEventsQuery orderBySportid($order = Criteria::ASC) Order by the sportID column
@@ -181,7 +181,7 @@ abstract class EventsQuery extends ModelCriteria
     {
         $sql = 'SELECT eventID, sportID, title, date FROM events WHERE eventID = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -638,9 +638,9 @@ abstract class EventsQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             EventsTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             EventsTableMap::clearRelatedInstancePool();
 
